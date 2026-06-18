@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'sports' => [
+        'url' => env('SPORTS_API_URL'),
+        'key' => env('SPORTS_API_KEY'),
+    ],
+
 ];
