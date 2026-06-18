@@ -25,12 +25,11 @@ class SportsApiService
      */
     protected function client()
     {
-        return Http::withHeaders([
+        return Http::withoutVerifying()->withHeaders([
             'x-apisports-key' => $this->apiKey,
             'Accept' => 'application/json',
         ])->baseUrl($this->baseUrl);
     }
-
     /**
      * Fetch upcoming fixtures for a specific date.
      */
