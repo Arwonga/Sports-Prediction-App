@@ -12,7 +12,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-slate-600">
                 <thead class="text-xs text-zinc-500 bg-slate-50 uppercase border-b border-slate-200">
-                    <tr class="bg-white hover:bg-slate-50 transition-colors duration-150 cursor-pointer" onclick="window.location='{{ route('predictions.show', $fixture->id) }}'">
+                    <tr>
                         <th scope="col" class="px-6 py-3 font-bold w-32">Date / Status</th>
                         <th scope="col" class="px-6 py-3 font-bold text-right w-1/4">Home Team</th>
                         <th scope="col" class="px-2 py-3 text-center"></th>
@@ -27,7 +27,7 @@
                 <tbody class="divide-y divide-slate-100">
                     
                     @forelse ($fixtures as $fixture)
-                        <tr class="bg-white hover:bg-slate-50 transition-colors duration-150">
+                        <tr class="bg-white hover:bg-slate-50 transition-colors duration-150 cursor-pointer" onclick="window.location='{{ route('predictions.show', $fixture->id) }}'">
                             
                             <td class="px-6 py-3 whitespace-nowrap">
                                 <div class="text-xs font-semibold text-slate-400">{{ $fixture->match_at->format('d/m H:i') }}</div>
