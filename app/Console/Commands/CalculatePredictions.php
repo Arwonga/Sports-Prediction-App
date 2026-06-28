@@ -44,10 +44,11 @@ class CalculatePredictions extends Command
         $bar->start();
 
         foreach ($upcomingFixtures as $fixture) {
-            // In a production environment, you would calculate these dynamically based on the last 10 games.
-            // For now, we establish the pipeline with realistic placeholder data.
-            $homeXg = 1.65; // Example Expected Goals
-            $awayXg = 1.20; 
+            
+           // Fetch dynamic xG based on historical data
+            $xG = $predictionService->calculateDynamicXg($fixture->home_team_id, $fixture->away_team_id);
+            $homeXg = $xG['home'];
+            $awayXg = $xG['away'];
 
             // Pass the xG into our Poisson math service
             $probabilities = $predictionService->calculateMarketProbabilities($homeXg, $awayXg);

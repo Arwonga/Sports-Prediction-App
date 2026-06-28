@@ -65,4 +65,28 @@ class PredictionService
         }
         return $n * $this->factorial($n - 1);
     }
+
+    /**
+     * Calculate dynamic Expected Goals (xG) based on recent historical performance.
+     */
+    public function calculateDynamicXg(int $homeTeamId, int $awayTeamId): array
+    {
+        // Home Team's Attack vs Away Team's Defense
+        $homeScoredAtHome = Fixture::where('home_team_id', $homeTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('home_score') ?? 1.4;
+        $awayConcededAway = Fixture::where('away_team_id', $awayTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('home_score') ?? 1.4;
+
+        // Away Team's Attack vs Home Team's Defense
+        $awayScoredAway = Fixture::where('away_team_id', $awayTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('away_score') ?? 1.2;
+        $homeConcededAtHome = Fixture::where('home_team_id', $homeTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('away_score') ?? 1.2;
+
+        // Calculate final xG by averaging attack capabilities against defensive vulnerabilities
+        $homeXg = ($homeScoredAtHome + $awayConcededAway) / 2;
+        $awayXg = ($awayScoredAway + $homeConcededAtHome) / 2;
+
+        // Ensure xG is never exactly 0 to prevent mathematical errors in the Poisson formula
+        return [
+            'home' => max($homeXg, 0.1),
+            'away' => max($awayXg, 0.1)
+        ];
+    }
 }
