@@ -12,7 +12,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-slate-600">
                 <thead class="text-xs text-zinc-500 bg-slate-50 uppercase border-b border-slate-200">
-                    <tr>
+                    <tr class="bg-white hover:bg-slate-50 transition-colors duration-150 cursor-pointer" onclick="window.location='{{ route('predictions.show', $fixture->id) }}'">
                         <th scope="col" class="px-6 py-3 font-bold w-32">Date / Status</th>
                         <th scope="col" class="px-6 py-3 font-bold text-right w-1/4">Home Team</th>
                         <th scope="col" class="px-2 py-3 text-center"></th>

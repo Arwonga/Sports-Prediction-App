@@ -39,8 +39,14 @@ class SportsApiService
             'date' => $date,
         ]);
 
+        // Check if API-Football returned a 200 OK but included API errors (like rate limits)
+        if (!empty($response->json('errors'))) {
+            \Illuminate\Support\Facades\Log::error("API Error: ", $response->json('errors'));
+            dd($response->json('errors')); // This will dump the exact error in your terminal
+        }
+
         if ($response->failed()) {
-            Log::error("Failed to fetch fixtures for date: {$date}");
+            \Illuminate\Support\Facades\Log::error("Failed to fetch fixtures for date: {$date}");
             return null;
         }
 

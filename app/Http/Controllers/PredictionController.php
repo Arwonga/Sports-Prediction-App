@@ -25,4 +25,15 @@ class PredictionController extends Controller
 
         return view('predictions.index', compact('fixtures'));
     }
+
+    /**
+     * Display the detailed Match Centre for a specific fixture.
+     */
+    public function show(Fixture $fixture)
+    {
+        // Ensure we load the teams and the prediction data
+        $fixture->load(['homeTeam', 'awayTeam', 'prediction']);
+
+        return view('predictions.show', compact('fixture'));
+    }
 }
