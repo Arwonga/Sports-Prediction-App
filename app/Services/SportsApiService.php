@@ -52,4 +52,17 @@ class SportsApiService
 
         return $response->json('response');
     }
+
+    public function getStandings(int $leagueId, int $season = 2026)
+    {
+        $response = $this->client()->get('/standings', [
+            'league' => $leagueId,
+            'season' => $season,
+        ]);
+
+        if ($response->failed()) return [];
+
+        // Return the first league's standings array
+        return $response->json('response.0.league.standings.0') ?? [];
+    }
 }

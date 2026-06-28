@@ -11,21 +11,20 @@ class PredictionController extends Controller
     /**
      * Display the dashboard with today's predictions.
      */
-    public function index()
-    {
-        // Fetch today's fixtures along with their teams and calculated predictions
-        $fixtures = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
-            ->whereDate('match_at', Carbon::today())
-            ->whereHas('homeTeam', function ($query) {
-                // Filtering out unwanted teams from specific regions
-                $query->whereNotIn('name', ['Al Nassr', 'Al Hilal', 'Al Ittihad', 'Al Ahli Saudi', 'Al Shabab']);
-            })
-            ->orderBy('match_at', 'asc')
-            ->get();
+    public function index(Request $request, \App\Services\SportsApiService $api)
+{
+    $leagueId = $request->query('league_id', 39); 
+    $fixtures = \App\Models\Fixture::whereDate('match_at', \Carbon\Carbon::today())->get();
+    
+    // 1. Fetch the data
+    $standings = $api->getStandings($leagueId) ?? [];
 
-        return view('predictions.index', compact('fixtures'));
-    }
+    // 2. Share it globally so the layout and sidebar can see it
+    view()->share('standings', $standings);
 
+    // 3. Just return the view with the fixtures
+    return view('predictions.index', compact('fixtures'));
+}
     /**
      * Display the detailed Match Centre for a specific fixture.
      */

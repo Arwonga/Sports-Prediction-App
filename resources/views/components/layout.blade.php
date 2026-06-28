@@ -80,11 +80,11 @@
 
     <!-- Page Content Slot -->
     <main class="max-w-[1400px] mx-auto flex w-full">
-    <x-sidebar />
-    <div class="flex-1 p-6">
+    <x-sidebar /> <div class="flex-1 p-6">
         {{ $slot }}
     </div>
-</main>
+
+    <x-sidebar-right :standings="$standings ?? [] /> </main>
 
 </body>
 </html>
