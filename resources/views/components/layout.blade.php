@@ -79,9 +79,12 @@
     </nav>
 
     <!-- Page Content Slot -->
-    <main class="w-full mx-auto px-4 py-8">
+    <main class="max-w-[1400px] mx-auto flex w-full">
+    <x-sidebar />
+    <div class="flex-1 p-6">
         {{ $slot }}
-    </main>
+    </div>
+</main>
 
 </body>
 </html>
