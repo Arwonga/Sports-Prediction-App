@@ -79,12 +79,17 @@
     </nav>
 
     <!-- Page Content Slot -->
-    <main class="max-w-[1400px] mx-auto flex w-full">
-    <x-sidebar /> <div class="flex-1 p-6">
-        {{ $slot }}
-    </div>
+    <main class="w-full mx-auto flex min-h-screen bg-slate-50 relative">
+        
+        <x-sidebar />
 
-    <x-sidebar-right :standings="$standings ?? [] /> </main>
+        <div class="flex-1 p-6 overflow-x-auto">
+            {{ $slot }}
+        </div>
+
+        <x-sidebar-right />
+        
+    </main>
 
 </body>
 </html>

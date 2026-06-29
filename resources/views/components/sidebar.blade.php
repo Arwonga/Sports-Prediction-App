@@ -3,11 +3,10 @@
     <!-- My Leagues Section -->
     <div class="mb-8">
         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">My Leagues</h3>
-        <select class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none">
-            <option>Kenya</option>
-            <option>England</option>
-            <option>Spain</option>
-        </select>
+        <select onchange="window.location.href='?league_id=' + this.value" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer">
+            <option value="39" {{ request('league_id') == 39 ? 'selected' : '' }}>England (Premier League)</option>
+            <option value="373" {{ request('league_id') == 373 ? 'selected' : '' }}>Kenya (Premier League)</option>
+    </select>
         <ul class="mt-4 space-y-2">
             <li class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 cursor-pointer">
                 <span class="text-yellow-500">★</span> Premier League

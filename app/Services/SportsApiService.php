@@ -53,16 +53,18 @@ class SportsApiService
         return $response->json('response');
     }
 
-    public function getStandings(int $leagueId, int $season = 2026)
+    public function getStandings(int $leagueId, int $season = 2025)
     {
         $response = $this->client()->get('/standings', [
             'league' => $leagueId,
-            'season' => $season,
+            'season' => $season, 
         ]);
 
-        if ($response->failed()) return [];
+        if ($response->failed()) {
+            return [];
+        }
 
-        // Return the first league's standings array
+        // Return the first array of standings
         return $response->json('response.0.league.standings.0') ?? [];
     }
 }
