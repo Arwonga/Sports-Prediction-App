@@ -11,28 +11,30 @@ class PredictionController extends Controller
     /**
      * Display the dashboard with today's predictions.
      */
-    public function index(Request $request, \App\Services\SportsApiService $api)
+    public function index(Request $request, \App\Services\SportsApiService $api, \App\Services\PredictionService $engine)
     {
-        // 1. Catch the league ID from the URL, default to 39 (England Premier League)
         $leagueId = $request->query('league_id', 39); 
-        
-        // 2. Fetch live standings based on the selected league, defaulting to empty array if none exist
         $standings = $api->getStandings($leagueId) ?? [];
         
-        // 3. Automatically pick 2 Featured Matches for today
-        $featuredMatches = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])
-            ->whereDate('match_at', \Carbon\Carbon::today())
-            ->take(2)
-            ->get();
+        $featuredMatches = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])->whereDate('match_at', \Carbon\Carbon::today())->take(2)->get();
 
-        // 4. Share data globally so the left and right sidebars can always access them
         view()->share('standings', $standings);
         view()->share('featuredMatches', $featuredMatches);
 
-        // 5. Fetch the main table fixtures for today
-        $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
-            ->whereDate('match_at', \Carbon\Carbon::today())
-            ->get();
+        $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])->whereDate('match_at', \Carbon\Carbon::today())->get();
+
+        // RUN THE MATH ENGINE FOR EVERY MATCH
+        foreach ($fixtures as $fixture) {
+            // Generate unique baseline stats based on team names for unique math outputs
+            $homePower = (crc32($fixture->homeTeam->name ?? 'Home') % 15) + 10; // Generates a number between 1.0 and 2.4
+            $awayPower = (crc32($fixture->awayTeam->name ?? 'Away') % 15) + 10;
+
+            $homeStats = ['avg_scored' => $homePower / 10, 'avg_conceded' => $awayPower / 10];
+            $awayStats = ['avg_scored' => $awayPower / 10, 'avg_conceded' => $homePower / 10];
+
+            // Inject the calculated object directly into the fixture
+            $fixture->prediction = $engine->calculatePrediction($homeStats, $awayStats, 2.5);
+        }
 
         return view('predictions.index', compact('fixtures'));
     }

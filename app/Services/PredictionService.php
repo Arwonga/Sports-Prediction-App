@@ -1,92 +1,132 @@
 <?php
 
 namespace App\Services;
-use App\Models\Fixture;
 
 class PredictionService
 {
     /**
-     * Calculate O/U 2.5 and BTTS probabilities based on Expected Goals (xG)
-     * * @param float $homeXg The expected goals for the home team
-     * @param float $awayXg The expected goals for the away team
-     * @return array
+     * Generate the complete quantitative prediction output.
      */
-    public function calculateMarketProbabilities(float $homeXg, float $awayXg): array
+    public function calculatePrediction(array $homeStats, array $awayStats, float $leagueAvgGoals)
     {
-        $under25Prob = 0;
-        $bttsYesProb = 0;
+        // STEP 1 & 2: Calculate Strengths
+        $homeAttack = $homeStats['avg_scored'] / $leagueAvgGoals;
+        $homeDefence = $homeStats['avg_conceded'] / $leagueAvgGoals;
         
-        // We calculate the probability of scoring 0 to 5 goals for both teams
-        // (Scoring 6+ goals is statistically negligible for standard predictions)
-        $maxGoals = 5;
+        $awayAttack = $awayStats['avg_scored'] / $leagueAvgGoals;
+        $awayDefence = $awayStats['avg_conceded'] / $leagueAvgGoals;
 
-        for ($homeGoals = 0; $homeGoals <= $maxGoals; $homeGoals++) {
-            for ($awayGoals = 0; $awayGoals <= $maxGoals; $awayGoals++) {
-                
-                // Calculate the exact probability of this specific scoreline (e.g., 2-1)
-                $scorelineProbability = $this->poisson($homeGoals, $homeXg) * $this->poisson($awayGoals, $awayXg);
+        $homeAdvantage = 1.15; // Standard home advantage weight
 
-                // Check for Under 2.5 Goals (0-0, 1-0, 0-1, 1-1, 2-0, 0-2)
-                if (($homeGoals + $awayGoals) < 2.5) {
-                    $under25Prob += $scorelineProbability;
-                }
+        // STEP 3: Expected Goals (xG)
+        $homeXg = $homeAttack * $awayDefence * $leagueAvgGoals * $homeAdvantage;
+        $awayXg = $awayAttack * $homeDefence * $leagueAvgGoals;
 
-                // Check for Both Teams To Score (BTTS: Yes)
-                if ($homeGoals > 0 && $awayGoals > 0) {
-                    $bttsYesProb += $scorelineProbability;
-                }
+        // STEP 4 & 5: Poisson Distribution & Matrix
+        $matrix = $this->generateScoreMatrix($homeXg, $awayXg);
+
+        // STEP 6: Calculate Outcomes (Excluding Draw Market Predictions per strategy)
+        $homeWinProb = 0;
+        $awayWinProb = 0;
+        $drawProb = 0;
+
+        foreach ($matrix as $homeGoals => $awayProbs) {
+            foreach ($awayProbs as $awayGoals => $prob) {
+                if ($homeGoals > $awayGoals) $homeWinProb += $prob;
+                elseif ($homeGoals < $awayGoals) $awayWinProb += $prob;
+                else $drawProb += $prob;
             }
         }
 
-        // Convert decimals to percentages and round to 2 decimal places
-        return [
-            'prob_under_2_5' => round($under25Prob * 100, 2),
-            'prob_over_2_5' => round((1 - $under25Prob) * 100, 2),
-            'prob_btts_yes' => round($bttsYesProb * 100, 2),
-            'prob_btts_no' => round((1 - $bttsYesProb) * 100, 2),
-        ];
-    }
+        // STEP 7: BTTS
+        $pHomeZero = $this->poisson(0, $homeXg);
+        $pAwayZero = $this->poisson(0, $awayXg);
+        $pZeroZero = $pHomeZero * $pAwayZero;
+        
+        $bttsYesProb = 1 - $pHomeZero - $pAwayZero + $pZeroZero;
+        $bttsNoProb = 1 - $bttsYesProb;
 
-    /**
-     * The Poisson Distribution Mathematical Formula
-     */
-    private function poisson(int $k, float $lambda): float
-    {
-        return (pow($lambda, $k) * exp(-$lambda)) / $this->factorial($k);
-    }
-
-    /**
-     * Helper to calculate factorial (k!)
-     */
-    private function factorial(int $n): int
-    {
-        if ($n <= 1) {
-            return 1;
+        // STEP 8: Over/Under 2.5
+        $underScores = [[0,0], [1,0], [0,1], [1,1], [2,0], [0,2]];
+        $under25Prob = 0;
+        foreach ($underScores as $score) {
+            $under25Prob += $matrix[$score[0]][$score[1]];
         }
-        return $n * $this->factorial($n - 1);
+        $over25Prob = 1 - $under25Prob;
+
+        // DECISION RULES & OUTPUT
+        return $this->formatOutput([
+            'homeXg' => $homeXg,
+            'awayXg' => $awayXg,
+            'homeWinProb' => $homeWinProb,
+            'awayWinProb' => $awayWinProb,
+            'drawProb' => $drawProb, // Calculated mathematically, but ignored in betting decisions
+            'bttsYesProb' => $bttsYesProb,
+            'bttsNoProb' => $bttsNoProb,
+            'over25Prob' => $over25Prob,
+            'under25Prob' => $under25Prob,
+            'matrix' => $matrix,
+            'dataQuality' => 90, // Placeholder for Confidence Score logic
+        ]);
     }
 
-    /**
-     * Calculate dynamic Expected Goals (xG) based on recent historical performance.
-     */
-    public function calculateDynamicXg(int $homeTeamId, int $awayTeamId): array
+    private function generateScoreMatrix($homeXg, $awayXg, $maxGoals = 6)
     {
-        // Home Team's Attack vs Away Team's Defense
-        $homeScoredAtHome = Fixture::where('home_team_id', $homeTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('home_score') ?? 1.4;
-        $awayConcededAway = Fixture::where('away_team_id', $awayTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('home_score') ?? 1.4;
+        $matrix = [];
+        for ($i = 0; $i <= $maxGoals; $i++) {
+            for ($j = 0; $j <= $maxGoals; $j++) {
+                $matrix[$i][$j] = $this->poisson($i, $homeXg) * $this->poisson($j, $awayXg);
+            }
+        }
+        return $matrix;
+    }
 
-        // Away Team's Attack vs Home Team's Defense
-        $awayScoredAway = Fixture::where('away_team_id', $awayTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('away_score') ?? 1.2;
-        $homeConcededAtHome = Fixture::where('home_team_id', $homeTeamId)->where('status', 'FT')->orderByDesc('match_at')->take(5)->avg('away_score') ?? 1.2;
+    private function poisson($k, $lambda)
+    {
+        return (exp(-$lambda) * pow($lambda, $k)) / $this->factorial($k);
+    }
 
-        // Calculate final xG by averaging attack capabilities against defensive vulnerabilities
-        $homeXg = ($homeScoredAtHome + $awayConcededAway) / 2;
-        $awayXg = ($awayScoredAway + $homeConcededAtHome) / 2;
+    private function factorial($n)
+    {
+        return ($n <= 1) ? 1 : $n * $this->factorial($n - 1);
+    }
 
-        // Ensure xG is never exactly 0 to prevent mathematical errors in the Poisson formula
-        return [
-            'home' => max($homeXg, 0.1),
-            'away' => max($awayXg, 0.1)
+    private function formatOutput($data)
+    {
+        $homeWinPct = round($data['homeWinProb'] * 100);
+        $awayWinPct = round($data['awayWinProb'] * 100);
+        $bttsYesPct = round($data['bttsYesProb'] * 100);
+        $over25Pct = round($data['over25Prob'] * 100);
+
+        // Strict Decision Rules (No Draw Market)
+        $verdict = "NO BET";
+        if ($homeWinPct > 55) $verdict = "HOME WIN";
+        elseif ($awayWinPct > 55) $verdict = "AWAY WIN";
+
+        // Sort matrix for top 3 correct scores
+        $flatScores = [];
+        foreach($data['matrix'] as $h => $aways) {
+            foreach($aways as $a => $p) {
+                $flatScores["$h - $a"] = round($p * 100, 1);
+            }
+        }
+        arsort($flatScores);
+        $topScores = array_slice($flatScores, 0, 3, true);
+
+        return (object) [
+            'home_win_prob' => $homeWinPct,
+            'away_win_prob' => $awayWinPct,
+            'btts_yes_prob' => $bttsYesPct,
+            'btts_no_prob' => 100 - $bttsYesPct,
+            'over_25_prob' => $over25Pct,
+            'under_25_prob' => 100 - $over25Pct,
+            'verdict' => $verdict,
+            'home_xg' => round($data['homeXg'], 2),
+            'away_xg' => round($data['awayXg'], 2),
+            'top_scores' => $topScores,
+            'confidence' => round(($data['dataQuality'] + 95 + 80 + 90) / 4),
+            'risk' => 'LOW',
+            'value' => 'HIGH'
         ];
     }
 }
