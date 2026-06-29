@@ -1,84 +1,92 @@
 <x-layout title="Alpha Predictions | Quantitative Data">
     
-    <div class="bg-white shadow-sm border border-slate-200 rounded-lg overflow-hidden">
-        
-        <div class="bg-zinc-800 px-6 py-4 flex justify-between items-center border-b border-zinc-900">
-            <h2 class="text-white font-bold text-lg tracking-wide">Mathematical Predictions and Statistics</h2>
-            <div class="bg-zinc-700 text-zinc-300 text-xs font-semibold px-3 py-1 rounded-full">
-                Alternative Markets
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    
+    <div class="bg-slate-900 px-6 py-4 border-b-4 border-red-600">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-boldb text-center text-white tracking-wide">Precise Mathematical Predictions and Statistics</h2>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider">Form</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer">
+                    <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500 shadow-inner"></div>
+                </label>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-slate-600">
-                <thead class="text-xs text-zinc-500 bg-slate-50 uppercase border-b border-slate-200">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 font-bold w-32">Date / Status</th>
-                        <th scope="col" class="px-6 py-3 font-bold text-right w-1/4">Home Team</th>
-                        <th scope="col" class="px-2 py-3 text-center"></th>
-                        <th scope="col" class="px-6 py-3 font-bold text-left w-1/4">Away Team</th>
-                        
-                        <th scope="col" class="px-3 py-3 font-bold text-center border-l border-slate-200 bg-slate-100">O 2.5 %</th>
-                        <th scope="col" class="px-3 py-3 font-bold text-center bg-slate-100">U 2.5 %</th>
-                        <th scope="col" class="px-3 py-3 font-bold text-center border-l border-slate-200 bg-slate-100">BTTS Y %</th>
-                        <th scope="col" class="px-3 py-3 font-bold text-center bg-slate-100">BTTS N %</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    
-                    @forelse ($fixtures as $fixture)
-                        <tr class="bg-white hover:bg-slate-50 transition-colors duration-150 cursor-pointer" onclick="window.location='{{ route('predictions.show', $fixture->id) }}'">
-                            
-                            <td class="px-6 py-3 whitespace-nowrap">
-                                <div class="text-xs font-semibold text-slate-400">{{ $fixture->match_at->format('d/m H:i') }}</div>
-                                <div class="text-[10px] font-bold mt-0.5 {{ $fixture->status == 'NS' ? 'text-slate-400' : 'text-rose-500' }}">
-                                    {{ $fixture->status }}
-                                </div>
-                            </td>
-
-                            <td class="px-6 py-3 text-right font-bold text-slate-800">
-                                {{ $fixture->homeTeam->name }}
-                            </td>
-                            
-                            <td class="px-2 py-3 text-center text-xs font-bold text-slate-300">
-                                -
-                            </td>
-
-                            <td class="px-6 py-3 text-left font-bold text-slate-800">
-                                {{ $fixture->awayTeam->name }}
-                            </td>
-
-                            @if($fixture->prediction)
-                                <td class="px-3 py-3 text-center font-bold text-emerald-600 border-l border-slate-50 bg-emerald-50/10">
-                                    {{ $fixture->prediction->prob_over_2_5 }}
-                                </td>
-                                <td class="px-3 py-3 text-center font-bold text-rose-500 bg-rose-50/10">
-                                    {{ $fixture->prediction->prob_under_2_5 }}
-                                </td>
-                                <td class="px-3 py-3 text-center font-bold text-emerald-600 border-l border-slate-50 bg-emerald-50/10">
-                                    {{ $fixture->prediction->prob_btts_yes }}
-                                </td>
-                                <td class="px-3 py-3 text-center font-bold text-rose-500 bg-rose-50/10">
-                                    {{ $fixture->prediction->prob_btts_no }}
-                                </td>
-                            @else
-                                <td colspan="4" class="px-6 py-3 text-center text-xs text-slate-400 italic border-l border-slate-50">
-                                    Awaiting model calculation...
-                                </td>
-                            @endif
-
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="px-6 py-12 text-center text-slate-500 font-medium">
-                                No fixtures found for today.
-                            </td>
-                        </tr>
-                    @endforelse
-
-                </tbody>
-            </table>
+        <div class="flex justify-center items-center gap-2 mt-2">
+            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Sat</button>
+            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Sun</button>
+            <button class="px-8 py-1.5 rounded-full text-xs font-bold bg-slate-700 text-white shadow-md border border-slate-600 transition-colors">Today</button>
+            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Tue</button>
+            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Wed</button>
         </div>
     </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm text-center whitespace-nowrap">
+            <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
+                <tr>
+                    <th class="py-4 pl-6 text-left">Home Team <br> <span class="mt-1 block">Away Team</span></th>
+                    <th class="py-4">Prob. % <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
+                    <th class="py-4">Pred</th>
+                    <th class="py-4">Correct <br> Score</th>
+                    <th class="py-4">Avg. <br> Goals</th>
+                    <th class="py-4">Weather</th>
+                    <th class="py-4">Odds</th>
+                    <th class="py-4 pr-6">Score</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @forelse($fixtures ?? [] as $fixture)
+                    <tr class="hover:bg-slate-50 transition-colors group">
+                        
+                        <td class="py-4 pl-6 text-left font-bold text-slate-800">
+                            <div class="flex items-center gap-2 mb-1.5">
+                                <div class="w-3 h-3 bg-blue-500 rounded-sm shrink-0"></div>
+                                <span class="truncate">{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-slate-500">
+                                <div class="w-3 h-3 bg-red-500 rounded-sm shrink-0"></div>
+                                <span class="truncate">{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
+                            </div>
+                        </td>
+
+                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest">
+                            48 &nbsp;&nbsp;&nbsp; 24
+                        </td>
+
+                        <td class="py-4">
+                            <span class="bg-yellow-400 text-slate-900 text-xs font-black px-2.5 py-1 rounded-full shadow-sm">1</span>
+                        </td>
+
+                        <td class="py-4 text-xs font-bold text-slate-700">3 - 1</td>
+
+                        <td class="py-4 text-xs font-semibold text-slate-600">3.63</td>
+
+                        <td class="py-4 text-xs font-semibold text-slate-500">
+                            35° <span class="text-slate-400 ml-1">⛅</span>
+                        </td>
+
+                        <td class="py-4 text-xs font-bold text-slate-700">
+                            <span class="border border-slate-200 bg-white rounded px-2.5 py-1 shadow-sm">1.70</span>
+                        </td>
+
+                        <td class="py-4 pr-6 text-xs font-bold text-slate-400">
+                            -
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="py-12 text-center text-slate-400 text-sm font-semibold">
+                            No fixtures found for today.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </x-layout>
