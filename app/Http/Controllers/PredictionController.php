@@ -11,32 +11,28 @@ class PredictionController extends Controller
     /**
      * Display the dashboard with today's predictions.
      */
-    public function index(Request $request, \App\Services\SportsApiService $api, \App\Services\PredictionService $engine)
+    public function index(Request $request, \App\Services\SportsApiService $api)
     {
+        // Catch the active filters
         $leagueId = $request->query('league_id', 39); 
+        $date = $request->query('date', \Carbon\Carbon::today()->format('Y-m-d'));
+
+        // Fetch Right Sidebar Data
         $standings = $api->getStandings($leagueId) ?? [];
-        
-        $featuredMatches = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])->whereDate('match_at', \Carbon\Carbon::today())->take(2)->get();
+        $featuredMatches = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])
+            ->whereDate('match_at', \Carbon\Carbon::today())
+            ->take(2)
+            ->get();
 
         view()->share('standings', $standings);
         view()->share('featuredMatches', $featuredMatches);
 
-        $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])->whereDate('match_at', \Carbon\Carbon::today())->get();
+        // Fetch Center Table Data (Filtered strictly by Date ONLY to avoid the SQL crash)
+        $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
+            ->whereDate('match_at', $date)
+            ->get();
 
-        // RUN THE MATH ENGINE FOR EVERY MATCH
-        foreach ($fixtures as $fixture) {
-            // Generate unique baseline stats based on team names for unique math outputs
-            $homePower = (crc32($fixture->homeTeam->name ?? 'Home') % 15) + 10; // Generates a number between 1.0 and 2.4
-            $awayPower = (crc32($fixture->awayTeam->name ?? 'Away') % 15) + 10;
-
-            $homeStats = ['avg_scored' => $homePower / 10, 'avg_conceded' => $awayPower / 10];
-            $awayStats = ['avg_scored' => $awayPower / 10, 'avg_conceded' => $homePower / 10];
-
-            // Inject the calculated object directly into the fixture
-            $fixture->prediction = $engine->calculatePrediction($homeStats, $awayStats, 2.5);
-        }
-
-        return view('predictions.index', compact('fixtures'));
+        return view('predictions.index', compact('fixtures', 'leagueId', 'date'));
     }
     /**
      * Display the detailed Match Centre for a specific fixture.

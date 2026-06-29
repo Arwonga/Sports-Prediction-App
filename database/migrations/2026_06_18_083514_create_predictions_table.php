@@ -13,20 +13,32 @@ return new class extends Migration
     {
         Schema::create('predictions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('fixture_id')->constrained()->cascadeOnDelete();
             
-            // Link directly to the match
-            $table->foreignId('fixture_id')->unique()->constrained('fixtures')->onDelete('cascade');
+            // 1X2 Probabilities (Excluding Draw per strategy)
+            $table->integer('home_win_prob');
+            $table->integer('away_win_prob');
             
-            // Alternative Market Statistical Probabilities (Stored as percentages, e.g., 68.50)
-            $table->decimal('prob_over_2_5', 5, 2)->comment('Probability of Over 2.5 Goals');
-            $table->decimal('prob_under_2_5', 5, 2)->comment('Probability of Under 2.5 Goals');
-            $table->decimal('prob_btts_yes', 5, 2)->comment('Probability of Both Teams to Score (Yes)');
-            $table->decimal('prob_btts_no', 5, 2)->comment('Probability of Both Teams to Score (No)');
+            // Goals & BTTS
+            $table->integer('btts_yes_prob');
+            $table->integer('btts_no_prob');
+            $table->integer('over_25_prob');
+            $table->integer('under_25_prob');
+            
+            // xG Data
+            $table->decimal('home_xg', 5, 2);
+            $table->decimal('away_xg', 5, 2);
+            
+            // Matrix & Analytics
+            $table->json('top_scores');
+            $table->string('verdict');
+            $table->integer('confidence');
+            $table->string('risk')->default('LOW');
+            $table->string('value')->default('HIGH');
             
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

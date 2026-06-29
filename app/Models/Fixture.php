@@ -18,6 +18,7 @@ class Fixture extends Model
         'status',
         'home_score',
         'away_score',
+        'league_id' ,
     ];
 
     protected $casts = [

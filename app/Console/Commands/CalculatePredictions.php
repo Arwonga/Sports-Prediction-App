@@ -8,59 +8,56 @@ use App\Models\Prediction;
 use App\Services\PredictionService;
 use Carbon\Carbon;
 
-/**
- * Command to calculate and save statistical predictions.
- */
 class CalculatePredictions extends Command
 {
-    /**
-     * The name and signature of the console command.
-     */
-    protected $signature = 'sports:calculate-predictions';
+    protected $signature = 'sports:calculate-predictions {date?}';
+    protected $description = 'Run the quantitative engine for a specific date (YYYY-MM-DD)';
 
-    /**
-     * The console command description.
-     */
-    protected $description = 'Calculate and store alternative market predictions for upcoming matches';
-
-    /**
-     * Execute the console command.
-     */
-    public function handle(PredictionService $predictionService): int
+    public function handle(PredictionService $engine)
     {
-        $this->info('Starting prediction calculations...');
+        $date = $this->argument('date') ?? Carbon::today()->format('Y-m-d');
+        
+        $this->info("Starting quantitative analysis for matches on: {$date}");
 
-        // Fetch fixtures happening from today onwards that haven't started yet
-        $upcomingFixtures = Fixture::where('match_at', '>=', Carbon::today())
-            ->where('status', 'NS')
+        $fixtures = Fixture::with(['homeTeam', 'awayTeam'])
+            ->whereDate('match_at', $date)
             ->get();
 
-        if ($upcomingFixtures->isEmpty()) {
-            $this->warn('No upcoming fixtures found to predict.');
-            return Command::SUCCESS;
+        if ($fixtures->isEmpty()) {
+            $this->warn("No fixtures found for {$date}. Run your API sync first.");
+            return;
         }
 
-        $bar = $this->output->createProgressBar(count($upcomingFixtures));
+        $bar = $this->output->createProgressBar(count($fixtures));
         $bar->start();
 
-        foreach ($upcomingFixtures as $fixture) {
-            
-           // Fetch dynamic xG based on historical data
-            $xG = $predictionService->calculateDynamicXg($fixture->home_team_id, $fixture->away_team_id);
-            $homeXg = $xG['home'];
-            $awayXg = $xG['away'];
+        foreach ($fixtures as $fixture) {
+            // In a production environment, you would query your team_stats table here.
+            // For now, we simulate the baseline stats as you integrate the API endpoints.
+            $homePower = (crc32($fixture->homeTeam->name ?? 'Home') % 15) + 10;
+            $awayPower = (crc32($fixture->awayTeam->name ?? 'Away') % 15) + 10;
 
-            // Pass the xG into our Poisson math service
-            $probabilities = $predictionService->calculateMarketProbabilities($homeXg, $awayXg);
+            $homeStats = ['avg_scored' => $homePower / 10, 'avg_conceded' => $awayPower / 10];
+            $awayStats = ['avg_scored' => $awayPower / 10, 'avg_conceded' => $homePower / 10];
 
-            // Save the exact percentages directly into the predictions table
+            $output = $engine->calculatePrediction($homeStats, $awayStats, 2.5);
+
             Prediction::updateOrCreate(
                 ['fixture_id' => $fixture->id],
                 [
-                    'prob_over_2_5' => $probabilities['prob_over_2_5'],
-                    'prob_under_2_5' => $probabilities['prob_under_2_5'],
-                    'prob_btts_yes' => $probabilities['prob_btts_yes'],
-                    'prob_btts_no' => $probabilities['prob_btts_no'],
+                    'home_win_prob' => $output->home_win_prob,
+                    'away_win_prob' => $output->away_win_prob,
+                    'btts_yes_prob' => $output->btts_yes_prob,
+                    'btts_no_prob' => $output->btts_no_prob,
+                    'over_25_prob' => $output->over_25_prob,
+                    'under_25_prob' => $output->under_25_prob,
+                    'home_xg' => $output->home_xg,
+                    'away_xg' => $output->away_xg,
+                    'top_scores' => $output->top_scores,
+                    'verdict' => $output->verdict,
+                    'confidence' => $output->confidence,
+                    'risk' => $output->risk,
+                    'value' => $output->value,
                 ]
             );
 
@@ -68,9 +65,7 @@ class CalculatePredictions extends Command
         }
 
         $bar->finish();
-        $this->newLine();
-        $this->info('Predictions successfully calculated and saved to the database!');
-
-        return Command::SUCCESS;
+        $this->newLine(2);
+        $this->info("Analysis complete. Predictions saved to database successfully.");
     }
 }

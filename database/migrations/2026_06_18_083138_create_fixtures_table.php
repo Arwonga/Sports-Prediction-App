@@ -32,6 +32,8 @@ return new class extends Migration
             // Indexes for optimizing complex queries and schedule lookups
             $table->index('api_fixture_id');
             $table->index('match_at');
+
+            $table->unsignedBigInteger('league_id')->nullable()->index();
         });
     }
 
