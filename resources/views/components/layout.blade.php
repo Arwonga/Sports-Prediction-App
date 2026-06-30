@@ -22,7 +22,7 @@
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen relative overflow-x-hidden">
 
     <!-- Decorative Red & Blue Background Gradient Blend -->
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] opacity-20 bg-gradient-to-r from-blue-500 via-purple-400 to-red-500 blur-3xl -z-10 pointer-events-none"></div>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] opacity-20 bg-gradient-to-r from-blue-500 via-purple-400 to-red-500 blur-3xl -z-10 pointer-events-none"></div>
 
     <!-- Main Premium Navigation Bar -->
     <nav class="bg-slate-900 border-b-2 border-red-600 sticky top-0 z-50 shadow-md w-full">
@@ -43,23 +43,36 @@
     </svg>
 
     <span class="text-red-500">Score</span>
-</a>
-                <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
-                <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
-                    The smart money runs on data
-                </div>
+    </a>
+            <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
+            <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
+                The smart money runs on data
+            </div>
             </div>
 
-           <!-- More Menu Container -->
-<div class="relative inline-block text-left ml-4" id="more-menu-container">
-    
-    <!-- 3-Dot Trigger Button -->
-    <button onclick="toggleMoreMenu()" class="flex flex-col items-center justify-center text-slate-300 hover:text-white transition-colors group">
-        <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
-        </svg>
-        <span class="text-[9px] font-bold mt-0.5 tracking-wider">More</span>
-    </button>
+
+    <!-- Right Side Top Nav Features -->
+<div class="flex flex-row items-center gap-4 ml-auto">
+    <!-- Search Bar -->
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+        <input type="text" id="match-search" onkeyup="filterMatches()" class="block py-1.5 pl-9 pr-3 text-xs text-white bg-slate-800 border border-slate-700 rounded-full focus:outline-none focus:border-slate-500 placeholder-slate-400 transition-all duration-300 focus:w-56 w-48 shadow-inner" placeholder="Search match...">
+    </div>
+
+    <!-- More Menu Container -->
+    <div class="relative" id="more-menu-container">
+        
+        <!-- 3-Dot Trigger Button -->
+        <button onclick="toggleMoreMenu()" class="flex flex-col items-center justify-center text-slate-300 hover:text-white transition-colors group mt-1">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
+            </svg>
+            <span class="text-[9px] font-bold mt-0.5 tracking-wider">More</span>
+        </button>
 
     <!-- The Dropdown Panel -->
     <div id="more-dropdown" class="hidden absolute right-0 mt-4 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 text-sm overflow-hidden transform opacity-100 scale-100">
@@ -114,6 +127,7 @@
             </a>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Javascript to make it work -->

@@ -141,4 +141,50 @@
     </div>
 </div>
 
+<script>
+    function filterMatches() {
+        // Get the search input value and convert to lowercase
+        let input = document.getElementById('match-search').value.toLowerCase();
+        let tableBody = document.querySelector('tbody');
+        
+        // Target all the main match rows (they have the 'group' class)
+        let matchRows = tableBody.querySelectorAll('tr.group');
+        let noMatchRow = document.getElementById('no-match-message');
+        let matchFound = false;
+
+        matchRows.forEach(row => {
+            // The first column contains the team names
+            let teamNames = row.querySelector('td:first-child').textContent.toLowerCase();
+            let analyticsRow = row.nextElementSibling; // The hidden dropdown row underneath
+
+            // If the search term is found in the team names
+            if (teamNames.includes(input)) {
+                row.style.display = ''; // Show match
+                matchFound = true;
+            } else {
+                row.style.display = 'none'; // Hide match
+                // Ensure the expanded analytics row hides too if it was open
+                if (analyticsRow && analyticsRow.id.startsWith('markets-')) {
+                    analyticsRow.classList.add('hidden');
+                }
+            }
+        });
+
+        // Handle the "No match found" message
+        if (!matchFound && input !== '') {
+            if (!noMatchRow) {
+                // Create the message row if it doesn't exist
+                tableBody.insertAdjacentHTML('beforeend', '<tr id="no-match-message"><td colspan="8" class="py-12 text-center text-slate-400 text-sm font-semibold">No matches found for "' + input + '".</td></tr>');
+            } else {
+                // Update text and show if it does exist
+                noMatchRow.querySelector('td').innerText = 'No matches found for "' + input + '".';
+                noMatchRow.style.display = '';
+            }
+        } else if (noMatchRow) {
+            // Hide the message if matches are found or input is cleared
+            noMatchRow.style.display = 'none';
+        }
+    }
+</script>
+
 </x-layout>
