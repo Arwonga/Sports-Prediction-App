@@ -29,9 +29,21 @@
         <!-- Top Branding & User Bar -->
         <div class="w-full px-6 flex justify-between items-center h-16">
             <div class="flex items-center gap-3">
-                <div class="font-brand text-3xl font-black text-blue-500 italic flex items-center tracking-tight">
-                    <span class="text-red-500">Pre</span>dict<span class="text-red-500 ml-1">Score</span>
-                </div>
+                <a href="/" class="group flex items-center text-[28px] font-black italic tracking-tight">
+    <span class="text-red-500">Pre</span>
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mx-0.5 text-white transition-transform duration-500 group-hover:rotate-90">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 12l3.5 2 1.5-3.5L12 7l-5 3.5 1.5 3.5z"></path>
+        <path d="M12 7V2"></path>
+        <path d="M17 10.5l4-2.5"></path>
+        <path d="M15.5 14l2.5 5"></path>
+        <path d="M8.5 14l-2.5 5"></path>
+        <path d="M7 10.5L3 8"></path>
+    </svg>
+
+    <span class="text-red-500">Score</span>
+</a>
                 <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
                 <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
                     The smart money runs on data
