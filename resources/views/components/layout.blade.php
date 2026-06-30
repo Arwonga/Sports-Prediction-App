@@ -130,7 +130,7 @@
 </div>
 </div>
 
-<!-- Javascript to make it work -->
+
 <script>
     function toggleMoreMenu() {
         const menu = document.getElementById('more-dropdown');

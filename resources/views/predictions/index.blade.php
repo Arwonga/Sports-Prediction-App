@@ -32,12 +32,30 @@
                     <th class="py-4">Win % <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
                     <th class="py-4">BTTS % <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
                     <th class="py-4">O/U 2.5 <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
-                    <th class="py-4">Verdict</th>
-                    <th class="py-4 pr-6">More</th>
+                    <th class="py-4">Avg <br> Goals</th>
+                    <th class="py-4">Coef. <br> &nbsp;</th>
+                    <th class="py-4">Verdict <br> &nbsp;</th>
+                    <th class="py-4">FT <br> Score</th>
+                    <th class="py-4 pr-6">More <br> &nbsp;</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse($fixtures ?? [] as $index => $fixture)
+    @php
+        $pred = $fixture->prediction;
+        
+        // 1. Calculate Average Goals on the fly (Home xG + Away xG)
+        $avgGoals = ($pred->home_xg ?? 0) + ($pred->away_xg ?? 0);
+        
+        // 2. Calculate Implied Odds (Coefficient) based on highest win probability
+        $maxProb = max($pred->home_win_prob ?? 1, $pred->away_win_prob ?? 1);
+        $coefficient = $maxProb > 0 ? (100 / $maxProb) : 0.00;
+        
+        // 3. Handle Full Time Score 
+        $homeScore = $fixture->home_goals; 
+        $awayScore = $fixture->away_goals;
+        $isPlayed = !is_null($homeScore) && !is_null($awayScore);
+    @endphp
                     <tr class="hover:bg-slate-50 transition-colors group">
                         <td class="py-4 pl-6 text-left font-bold text-slate-800">
                             <div class="flex items-center gap-2 mb-1.5">
@@ -63,21 +81,43 @@
                             {{ $fixture->prediction->btts_yes_prob ?? '61' }} &nbsp;&nbsp;&nbsp; {{ $fixture->prediction->btts_no_prob ?? '39' }}
                         </td>
 
-                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest">
-                            {{ $fixture->prediction->over_25_prob ?? '60' }} &nbsp;&nbsp;&nbsp; {{ $fixture->prediction->under_25_prob ?? '40' }}
-                        </td>
+                        <!-- Over/Under Probabilities -->
+        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest text-center">
+            {{ $pred->over_25_prob ?? '60' }} &nbsp;&nbsp;&nbsp; {{ $pred->under_25_prob ?? '40' }}
+        </td>
 
-                        <td class="py-4">
-                            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-sm shadow-sm uppercase tracking-wide">
-                                {{ $fixture->prediction->verdict ?? 'HOME WIN' }}
-                            </span>
-                        </td>
+        <!-- 1. Average Goals Prediction -->
+        <td class="py-4 text-xs font-bold text-slate-700 text-center">
+            {{ number_format($avgGoals, 2) }}
+        </td>
 
-                        <td class="py-4 pr-6">
-                            <button onclick="document.getElementById('markets-{{ $index }}').classList.toggle('hidden')" class="text-slate-400 hover:text-blue-600 transition-colors">
-                                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                        </td>
+        <!-- 2. Coefficient (Implied Odds) -->
+        <td class="py-4 text-xs font-bold text-blue-600 text-center">
+            {{ number_format($coefficient, 2) }}
+        </td>
+
+        <!-- 3. Final Verdict Bubble -->
+        <td class="py-4 text-center">
+            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-sm shadow-sm uppercase tracking-wide">
+                {{ $pred->verdict ?? 'NO BET' }}
+            </span>
+        </td>
+
+        <!-- 4. Full Time Score -->
+        <td class="py-4 text-xs font-black text-slate-900 text-center">
+            @if($isPlayed)
+                <span class="bg-slate-200 px-2 py-1 rounded shadow-inner">{{ $homeScore }} - {{ $awayScore }}</span>
+            @else
+                <span class="text-slate-400">-</span>
+            @endif
+        </td>
+
+        <!-- 5. Toggle More Markets Button -->
+        <td class="py-4 pr-6 text-center">
+            <button onclick="document.getElementById('markets-{{ $index }}').classList.toggle('hidden')" class="text-slate-400 hover:text-blue-600 transition-colors">
+                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+        </td>                  
                     </tr>
 
                     <tr id="markets-{{ $index }}" class="hidden bg-slate-900 border-b-4 border-slate-800">
