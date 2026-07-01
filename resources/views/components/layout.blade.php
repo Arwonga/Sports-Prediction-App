@@ -42,7 +42,7 @@
         <path d="M7 10.5L3 8"></path>
     </svg>
 
-    <span class="text-red-500">Score</span>
+    <span class="text-red-500  ">Score</span>
     </a>
             <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
             <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
