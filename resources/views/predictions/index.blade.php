@@ -240,5 +240,15 @@
         }
     }
 </script>
+<!-- Over/Under Probabilities (Highlighted High Value) -->
+        <td class="py-4 text-xs font-bold tracking-widest text-center">
+            @php
+                $over25 = $pred->over_25_prob ?? 60;
+                $under25 = $pred->under_25_prob ?? 40;
+            @endphp
+            <span class="{{ $over25 > $under25 ? 'text-yellow-500' : 'text-slate-700' }}">{{ $over25 }}</span>
+            <span class="text-slate-300 mx-2">|</span>
+            <span class="{{ $under25 > $over25 ? 'text-yellow-500' : 'text-slate-700' }}">{{ $under25 }}</span>
+        </td>
 
 </x-layout>
