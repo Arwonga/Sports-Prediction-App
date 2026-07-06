@@ -87,18 +87,38 @@
                             </div>
                         </td>
 
-                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest">
-                            {{ $fixture->prediction->home_win_prob ?? '57' }} &nbsp;&nbsp;&nbsp; {{ $fixture->prediction->away_win_prob ?? '18' }}
-                        </td>
+                        <td class="py-4 text-xs font-bold text-center">
+            @php
+                $homeWin = $pred->home_win_prob ?? 57;
+                $awayWin = $pred->away_win_prob ?? 18;
+            @endphp
+            <div class="flex justify-center items-center gap-4">
+                <span class="w-6 text-right {{ $homeWin > $awayWin ? 'text-green-500' : 'text-slate-700' }}">{{ $homeWin }}</span>
+                <span class="w-6 text-left {{ $awayWin > $homeWin ? 'text-green-500' : 'text-slate-700' }}">{{ $awayWin }}</span>
+            </div>
+        </td>
 
-                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest">
-                            {{ $fixture->prediction->btts_yes_prob ?? '61' }} &nbsp;&nbsp;&nbsp; {{ $fixture->prediction->btts_no_prob ?? '39' }}
-                        </td>
+        <td class="py-4 text-xs font-bold text-center">
+            @php
+                $bttsYes = $pred->btts_yes_prob ?? 61;
+                $bttsNo = $pred->btts_no_prob ?? 39;
+            @endphp
+            <div class="flex justify-center items-center gap-4">
+                <span class="w-6 text-right {{ $bttsYes > $bttsNo ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsYes }}</span>
+                <span class="w-6 text-left {{ $bttsNo > $bttsYes ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsNo }}</span>
+            </div>
+        </td>
 
-                        <!-- Over/Under Probabilities -->
-                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest text-center">
-                            {{ $pred->over_25_prob ?? '60' }} &nbsp;&nbsp;&nbsp; {{ $pred->under_25_prob ?? '40' }}
-                        </td>
+        <td class="py-4 text-xs font-bold text-center">
+            @php
+                $over25 = $pred->over_25_prob ?? 60;
+                $under25 = $pred->under_25_prob ?? 40;
+            @endphp
+            <div class="flex justify-center items-center gap-4">
+                <span class="w-6 text-right {{ $over25 > $under25 ? 'text-green-500' : 'text-slate-700' }}">{{ $over25 }}</span>
+                <span class="w-6 text-left {{ $under25 > $over25 ? 'text-green-500' : 'text-slate-700' }}">{{ $under25 }}</span>
+            </div>
+        </td>
 
                             <!-- 1. Average Goals Prediction -->
                             <td class="py-4 text-xs font-bold text-slate-700 text-center">
