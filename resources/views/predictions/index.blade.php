@@ -96,26 +96,26 @@
                         </td>
 
                         <!-- Over/Under Probabilities -->
-        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest text-center">
-            {{ $pred->over_25_prob ?? '60' }} &nbsp;&nbsp;&nbsp; {{ $pred->under_25_prob ?? '40' }}
-        </td>
+                        <td class="py-4 text-xs font-bold text-slate-700 tracking-widest text-center">
+                            {{ $pred->over_25_prob ?? '60' }} &nbsp;&nbsp;&nbsp; {{ $pred->under_25_prob ?? '40' }}
+                        </td>
 
-        <!-- 1. Average Goals Prediction -->
-        <td class="py-4 text-xs font-bold text-slate-700 text-center">
-            {{ number_format($avgGoals, 2) }}
-        </td>
+                            <!-- 1. Average Goals Prediction -->
+                            <td class="py-4 text-xs font-bold text-slate-700 text-center">
+                                {{ number_format($avgGoals, 2) }}
+                            </td>
 
-        <!-- 2. Coefficient (Implied Odds) -->
-        <td class="py-4 text-xs font-bold text-blue-600 text-center">
-            {{ number_format($coefficient, 2) }}
-        </td>
+                        <!-- 2. Coefficient (Implied Odds) -->
+                        <td class="py-4 text-xs font-bold text-blue-600 text-center">
+                            {{ number_format($coefficient, 2) }}
+                        </td>
 
-        <!-- 3. Final Verdict Bubble -->
-        <td class="py-4 text-center">
-            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-sm shadow-sm uppercase tracking-wide">
-                {{ $pred->verdict ?? 'NO BET' }}
-            </span>
-        </td>
+                        <!-- 3. Final Verdict Bubble -->
+                        <td class="py-4 text-center">
+                            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-sm shadow-sm uppercase tracking-wide">
+                                {{ $pred->verdict ?? 'NO BET' }}
+                            </span>
+                        </td>
 
         <!-- 4. Full Time Score -->
         <td class="py-4 text-xs font-black text-slate-900 text-center">
