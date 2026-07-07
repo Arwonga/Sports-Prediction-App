@@ -37,11 +37,12 @@ class PredictionController extends Controller
     /**
      * Display the detailed Match Centre for a specific fixture.
      */
-    public function show(Fixture $fixture)
+    public function show($id)
     {
-        // Ensure we load the teams and the prediction data
-        $fixture->load(['homeTeam', 'awayTeam', 'prediction']);
+    // Fetch the fixture with its related teams and calculated prediction engine records
+    $fixture = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])->findOrFail($id);
 
-        return view('predictions.show', compact('fixture'));
+    // Return the detailed analysis template
+    return view('predictions.show', compact('fixture'));
     }
 }
