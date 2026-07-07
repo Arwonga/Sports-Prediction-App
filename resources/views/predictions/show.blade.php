@@ -1,8 +1,10 @@
 <x-layout>
     <div class="w-full">
         
+        <!-- Match Hero Section (Dynamic Data) -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6">
             
+            <!-- Top Toggles -->
             <div class="flex justify-center mb-6">
                 <div class="flex items-center bg-slate-100 rounded-full p-1 shadow-inner">
                     <button class="px-6 py-1.5 text-xs font-bold bg-slate-800 text-white rounded-full shadow-sm">Prediction</button>
@@ -10,54 +12,69 @@
                 </div>
             </div>
 
+            <!-- Match Title & Meta -->
             <div class="text-center mb-10">
-                <h1 class="text-3xl font-black text-slate-800 mb-3 tracking-tight">Portugal <span class="text-slate-300 font-light mx-3">VS</span> Spain</h1>
+                <h1 class="text-3xl font-black text-slate-800 mb-3 tracking-tight">
+                    {{ $fixture->homeTeam->name ?? 'Home' }} 
+                    <span class="text-slate-300 font-light mx-3">VS</span> 
+                    {{ $fixture->awayTeam->name ?? 'Away' }}
+                </h1>
                 <div class="flex items-center justify-center gap-3 text-xs text-slate-500 font-bold uppercase tracking-wider">
-                    <span>Dallas Stadium</span>
+                    <span>{{ $fixture->venue_name ?? 'Stadium TBA' }}</span>
                     <span class="text-slate-300">•</span>
-                    <span class="flex items-center gap-1">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
-                        38°
-                    </span>
-                    <span class="text-slate-300">•</span>
-                    <span>06/07/2026 22:00</span>
+                    <span>{{ \Carbon\Carbon::parse($fixture->match_at)->timezone(session('timezone', 'Africa/Nairobi'))->format('d/m/Y H:i') }}</span>
                 </div>
             </div>
 
+            <!-- Visuals & Form -->
             <div class="flex justify-between items-center px-10">
                 
+                <!-- Home Team -->
                 <div class="flex flex-col items-center gap-4">
-                    <div class="w-28 h-28 bg-green-600 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100">
-                        POR
-                    </div>
-                    <div class="flex gap-1.5 text-[10px] font-black text-white">
-                        <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">W</span>
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center shadow-sm">D</span>
-                        <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">W</span>
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center shadow-sm">D</span>
-                        <span class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center shadow-sm">L</span>
+                    <div class="w-28 h-28 bg-slate-800 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100 uppercase">
+                        {{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}
                     </div>
                 </div>
 
+                <!-- Center Prediction Highlight (Dynamic Calculation) -->
+                @php
+                    $pred = $fixture->prediction;
+                    $bestMarket = 'NO BET';
+                    $bestProb = 0;
+                    $icon = '-';
+                    $color = 'slate-400';
+
+                    if($pred) {
+                        $markets = [
+                            ['name' => 'Over 2.5', 'prob' => $pred->over_25_prob, 'icon' => 'O', 'color' => 'green-500'],
+                            ['name' => 'Under 2.5', 'prob' => $pred->under_25_prob, 'icon' => 'U', 'color' => 'blue-500'],
+                            ['name' => 'BTTS Yes', 'prob' => $pred->btts_yes_prob, 'icon' => 'Y', 'color' => 'green-500'],
+                            ['name' => 'BTTS No', 'prob' => $pred->btts_no_prob, 'icon' => 'N', 'color' => 'blue-500']
+                        ];
+
+                        foreach($markets as $market) {
+                            if($market['prob'] > $bestProb) {
+                                $bestProb = $market['prob'];
+                                $bestMarket = $market['name'];
+                                $icon = $market['icon'];
+                                $color = $market['color'];
+                            }
+                        }
+                    }
+                @endphp
                 <div class="flex flex-col items-center px-4">
-                    <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-slate-900 font-black mb-4 shadow-md text-xl">
-                        X
+                    <div class="w-12 h-12 bg-{{ $color }} rounded-full flex items-center justify-center text-white font-black mb-4 shadow-md text-xl">
+                        {{ $icon }}
                     </div>
-                    <div class="px-5 py-2 border-2 border-yellow-400 rounded-full text-slate-800 font-bold text-sm shadow-sm bg-yellow-50/50">
-                        Draw Probability 44%
+                    <div class="px-5 py-2 border-2 border-{{ $color }} rounded-full text-slate-800 font-bold text-sm shadow-sm bg-slate-50">
+                        {{ $bestMarket }} Probability {{ $bestProb }}%
                     </div>
                 </div>
 
+                <!-- Away Team -->
                 <div class="flex flex-col items-center gap-4">
-                    <div class="w-28 h-28 bg-red-600 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100">
-                        ESP
-                    </div>
-                    <div class="flex gap-1.5 text-[10px] font-black text-white">
-                        <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">W</span>
-                        <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">W</span>
-                        <span class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shadow-sm">W</span>
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center shadow-sm">D</span>
-                        <span class="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center shadow-sm">D</span>
+                    <div class="w-28 h-28 bg-slate-800 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100 uppercase">
+                        {{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}
                     </div>
                 </div>
 
@@ -75,7 +92,7 @@
             <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Cards</button>
         </div>
 
-        <!-- The Quantitative Summary Row (Dummy Data) -->
+        <!-- The Quantitative Summary Row (Dynamic Data) -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
             <div class="overflow-x-auto">
                 <table class="w-full min-w-max">
@@ -96,40 +113,64 @@
                             <!-- Teams -->
                             <td class="py-4 pl-6 text-left font-bold text-slate-800">
                                 <div class="flex items-center gap-2 mb-1.5">
-                                    <span class="w-4 h-4 rounded-full bg-green-600 text-[8px] flex items-center justify-center text-white shrink-0 shadow-sm">P</span>
-                                    <span>Portugal</span>
+                                    <span class="w-4 h-4 rounded-full bg-slate-800 text-[8px] flex items-center justify-center text-white shrink-0 shadow-sm">{{ substr($fixture->homeTeam->name ?? 'H', 0, 1) }}</span>
+                                    <span>{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
                                 </div>
                                 <div class="flex items-center gap-2 text-slate-500">
-                                    <span class="w-4 h-4 rounded-full bg-red-600 text-[8px] flex items-center justify-center text-white shrink-0 shadow-sm">S</span>
-                                    <span>Spain</span>
+                                    <span class="w-4 h-4 rounded-full bg-slate-500 text-[8px] flex items-center justify-center text-white shrink-0 shadow-sm">{{ substr($fixture->awayTeam->name ?? 'A', 0, 1) }}</span>
+                                    <span>{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
                                 </div>
                             </td>
+                            
                             <!-- Probabilities (O/U Highlighted) -->
+                            @php
+                                $over25 = $fixture->prediction->over_25_prob ?? 0;
+                                $under25 = $fixture->prediction->under_25_prob ?? 0;
+                                $predBubble = $over25 > $under25 ? 'O' : 'U';
+                                // Fallback math if avg_goals column doesn't exist yet
+                                $calcAvg = number_format(($over25 / 100) * 3.2 + ($under25 / 100) * 1.5, 2);
+                            @endphp
                             <td class="py-4 text-xs font-bold text-center">
                                 <div class="flex justify-center items-center gap-4">
-                                    <span class="w-6 text-right text-green-500">55</span>
-                                    <span class="w-6 text-left text-slate-700">45</span>
+                                    <span class="w-6 text-right {{ $over25 > $under25 ? 'text-green-500' : 'text-slate-700' }}">{{ $over25 }}</span>
+                                    <span class="w-6 text-left {{ $under25 > $over25 ? 'text-green-500' : 'text-slate-700' }}">{{ $under25 }}</span>
                                 </div>
                             </td>
+                            
                             <!-- Pred Bubble -->
                             <td class="py-4 text-center">
-                                <span class="bg-yellow-400 text-slate-900 text-[10px] font-black w-7 h-7 rounded-full flex items-center justify-center mx-auto shadow-sm">O</span>
+                                <span class="bg-yellow-400 text-slate-900 text-[10px] font-black w-7 h-7 rounded-full flex items-center justify-center mx-auto shadow-sm">{{ $predBubble }}</span>
                             </td>
-                            <!-- Correct Score -->
-                            <td class="py-4 text-xs font-bold text-slate-700 text-center">1 - 1</td>
+                            
+                            <!-- Correct Score (Fallback if no DB column) -->
+                            <td class="py-4 text-xs font-bold text-slate-700 text-center">
+                                {{ $fixture->prediction->exact_score ?? 'N/A' }}
+                            </td>
+                            
                             <!-- Avg Goals -->
-                            <td class="py-4 text-xs font-bold text-slate-700 text-center">2.45</td>
-                            <!-- Weather -->
+                            <td class="py-4 text-xs font-bold text-slate-700 text-center">
+                                {{ $fixture->prediction->avg_goals ?? $calcAvg }}
+                            </td>
+                            
+                            <!-- Weather (Pending API Integration) -->
                             <td class="py-4 text-xs font-bold text-slate-500 text-center">
                                 <div class="flex justify-center items-center gap-1">
-                                    38° <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                                    - <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
                                 </div>
                             </td>
-                            <!-- Coefficient -->
-                            <td class="py-4 text-xs font-bold text-blue-600 text-center">3.50</td>
+                            
+                            <!-- Coefficient/Odds -->
+                            <td class="py-4 text-xs font-bold text-blue-600 text-center">
+                                {{ $fixture->odds ?? '-' }}
+                            </td>
+                            
                             <!-- Final Score -->
                             <td class="py-4 pr-6 text-center">
-                                <span class="text-slate-400 font-black text-xs">-</span>
+                                @if(!is_null($fixture->home_score) && !is_null($fixture->away_score))
+                                    <span class="font-black text-slate-800 text-sm">{{ $fixture->home_score }} - {{ $fixture->away_score }}</span>
+                                @else
+                                    <span class="text-slate-400 font-black text-xs">-</span>
+                                @endif
                             </td>
                         </tr>
                     </tbody>
@@ -140,73 +181,78 @@
         <!-- 2-Column Grid for H2H and Match Intro -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             
-            <!-- Task 4: Head to Head (Dummy Data) -->
+            <!-- Task 4: Head to Head (Dynamic Data) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                 <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Head to Head</h3>
                 
                 <!-- Filters -->
                 <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-100 pb-4 justify-center">
                     <button class="px-4 py-1.5 text-[10px] font-bold bg-slate-700 text-white rounded-full">All</button>
-                    <button class="px-4 py-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 rounded-full hover:bg-slate-100 border border-slate-100 transition-colors">World Cup 2026</button>
-                    <button class="px-4 py-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 rounded-full hover:bg-slate-100 border border-slate-100 transition-colors">UEFA Nations</button>
+                    <button class="px-4 py-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 rounded-full hover:bg-slate-100 border border-slate-100 transition-colors">League</button>
                 </div>
 
                 <!-- Match List -->
-                <div class="space-y-2 mb-8">
-                    <!-- Row 1 -->
-                    <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
-                        <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">08/06<br>2025</div>
-                        <div class="flex-1 flex items-center justify-center gap-4">
-                            <span class="text-slate-700 font-bold text-right w-20 truncate">Portugal</span>
-                            <div class="flex flex-col items-center justify-center w-14 bg-slate-100 rounded py-1 group-hover:bg-white group-hover:shadow-sm transition-all">
-                                <span class="font-black text-slate-800">2 - 2</span>
-                                <span class="text-[9px] text-slate-400 mt-0.5">(1 - 2)</span>
-                            </div>
-                            <span class="text-slate-700 font-bold text-left w-20 truncate">Spain</span>
-                        </div>
-                        <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">UNL</div>
-                    </div>
-                    
-                    <!-- Row 2 -->
-                    <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors bg-slate-50/50 group">
-                        <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">27/09<br>2022</div>
-                        <div class="flex-1 flex items-center justify-center gap-4">
-                            <span class="text-slate-700 font-bold text-right w-20 truncate">Portugal</span>
-                            <div class="flex flex-col items-center justify-center w-14 bg-white shadow-sm rounded py-1">
-                                <span class="font-black text-slate-800">0 - 1</span>
-                                <span class="text-[9px] text-slate-400 mt-0.5">(0 - 0)</span>
-                            </div>
-                            <span class="text-slate-700 font-bold text-left w-20 truncate">Spain</span>
-                        </div>
-                        <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">UNL</div>
-                    </div>
+                <div class="space-y-2 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                    @php
+                        // We assume $fixture->h2h will be an array/collection of historical matches
+                        $h2hMatches = $fixture->h2h ?? [];
+                        $homeWins = 0;
+                        $awayWins = 0;
+                        $draws = 0;
+                        $totalMatches = count($h2hMatches);
+                    @endphp
 
-                    <!-- Row 3 -->
-                    <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
-                        <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">15/06<br>2018</div>
-                        <div class="flex-1 flex items-center justify-center gap-4">
-                            <span class="text-slate-700 font-bold text-right w-20 truncate">Portugal</span>
-                            <div class="flex flex-col items-center justify-center w-14 bg-slate-100 rounded py-1 group-hover:bg-white group-hover:shadow-sm transition-all">
-                                <span class="font-black text-slate-800">3 - 3</span>
-                                <span class="text-[9px] text-slate-400 mt-0.5">(2 - 1)</span>
+                    @forelse($h2hMatches as $match)
+                        @php
+                            // Calculate stats for the distribution bar
+                            if($match->home_score > $match->away_score) {
+                                if($match->home_team_id == $fixture->home_team_id) $homeWins++; else $awayWins++;
+                            } elseif($match->away_score > $match->home_score) {
+                                if($match->away_team_id == $fixture->home_team_id) $homeWins++; else $awayWins++;
+                            } else {
+                                $draws++;
+                            }
+                        @endphp
+                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
+                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
                             </div>
-                            <span class="text-slate-700 font-bold text-left w-20 truncate">Spain</span>
+                            <div class="flex-1 flex items-center justify-center gap-4">
+                                <span class="text-slate-700 font-bold text-right w-20 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
+                                <div class="flex flex-col items-center justify-center w-14 bg-slate-100 rounded py-1 group-hover:bg-white group-hover:shadow-sm transition-all">
+                                    <span class="font-black text-slate-800">{{ $match->home_score }} - {{ $match->away_score }}</span>
+                                    <span class="text-[9px] text-slate-400 mt-0.5">({{ $match->ht_home_score ?? 0 }} - {{ $match->ht_away_score ?? 0 }})</span>
+                                </div>
+                                <span class="text-slate-700 font-bold text-left w-20 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
+                            </div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
                         </div>
-                        <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">WC</div>
-                    </div>
+                    @empty
+                        <div class="text-center text-xs text-slate-400 py-6 font-bold">
+                            No historical H2H data available yet.
+                        </div>
+                    @endforelse
                 </div>
 
                 <!-- Win Distribution Bar -->
+                @php
+                    $homePct = $totalMatches > 0 ? round(($homeWins / $totalMatches) * 100) : 0;
+                    $drawPct = $totalMatches > 0 ? round(($draws / $totalMatches) * 100) : 0;
+                    $awayPct = $totalMatches > 0 ? round(($awayWins / $totalMatches) * 100) : 0;
+                @endphp
                 <div class="mb-2">
                     <div class="flex h-2.5 rounded-full overflow-hidden w-full mb-4 bg-slate-100">
-                        <div class="bg-green-500 w-[0%]"></div>
-                        <div class="bg-yellow-400 w-[67%] relative"><div class="absolute inset-y-0 right-0 w-px bg-white/50"></div></div>
-                        <div class="bg-red-500 w-[33%]"></div>
+                        <div class="bg-green-500 transition-all duration-500" style="width: {{ $homePct }}%"></div>
+                        <div class="bg-yellow-400 relative transition-all duration-500" style="width: {{ $drawPct }}%">
+                            @if($drawPct > 0)<div class="absolute inset-y-0 right-0 w-px bg-white/50"></div>@endif
+                        </div>
+                        <div class="bg-red-500 transition-all duration-500" style="width: {{ $awayPct }}%"></div>
                     </div>
                     <div class="flex justify-between text-center text-[10px] font-bold text-slate-500">
-                        <div><span class="text-slate-800 block mb-1">Portugal 0</span> 0%</div>
-                        <div><span class="text-slate-800 block mb-1">Draw 4</span> 67%</div>
-                        <div><span class="text-slate-800 block mb-1">Spain 2</span> 33%</div>
+                        <div><span class="text-slate-800 block mb-1">{{ substr($fixture->homeTeam->name ?? 'Home', 0, 10) }} {{ $homeWins }}</span> {{ $homePct }}%</div>
+                        <div><span class="text-slate-800 block mb-1">Draw {{ $draws }}</span> {{ $drawPct }}%</div>
+                        <div><span class="text-slate-800 block mb-1">{{ substr($fixture->awayTeam->name ?? 'Away', 0, 10) }} {{ $awayWins }}</span> {{ $awayPct }}%</div>
                     </div>
                 </div>
                 
@@ -221,21 +267,166 @@
                 <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Match Intro</h3>
                 
                 <div class="text-sm text-slate-600 space-y-5 leading-relaxed flex-1">
-                    <p>Portugal and Spain meet in the World Cup 2026 Round of 16 at Estádio Nacional on 6 July 2026 GMT.</p>
+                    <p>{{ $fixture->homeTeam->name ?? 'Home' }} and {{ $fixture->awayTeam->name ?? 'Away' }} meet in the {{ $fixture->league->name ?? 'League' }} at {{ $fixture->venue_name ?? 'the stadium' }} on {{ \Carbon\Carbon::parse($fixture->match_at)->format('j F Y') }}.</p>
                     
-                    <p>Portugal reached this knockout match after a 2-1 win over Croatia, while Spain moved on with a convincing 3-0 victory against Austria.</p>
+                    <p>Looking at historical data, we have recorded {{ $totalMatches ?? 0 }} direct encounters between these two sides. {{ $fixture->homeTeam->name ?? 'The home team' }} has secured {{ $homeWins ?? 0 }} victories, while {{ $fixture->awayTeam->name ?? 'the visitors' }} have won {{ $awayWins ?? 0 }} times. They have drawn {{ $draws ?? 0 }} matches.</p>
                     
-                    <p>The Portuguese have won 50% of their four matches in the tournament, mixing a heavy 5-0 victory over Uzbekistan with draws against DR Congo and Colombia.</p>
-                    
-                    <p>Spain have built stronger momentum, winning 67% of their last six matches and keeping control in recent World Cup games, including wins over Saudi Arabia, Uruguay and Austria.</p>
-                    
-                    <!-- Verdict Highlight -->
                     <div class="mt-8 p-4 bg-yellow-50/80 rounded-xl border border-yellow-200/60 shadow-sm flex items-start gap-3">
                         <div class="mt-0.5 text-yellow-500">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
-                        <p class="font-bold text-slate-800">Our algorithm predicts Portugal and Spain to draw 1-1.</p>
+                        <p class="font-bold text-slate-800">Our algorithm predicts the highest probability edge on the <span class="uppercase text-yellow-600 font-black">{{ $bestMarket ?? 'NO BET' }}</span> market.</p>
                     </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6">
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Standings of Both Teams</h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-max text-xs text-slate-600 mb-6">
+                    <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
+                        <tr>
+                            <th class="text-left py-3 pl-4">Group K</th>
+                            <th class="py-3 text-center w-12">Pts</th>
+                            <th class="py-3 text-center w-10">GP</th>
+                            <th class="py-3 text-center w-10">W</th>
+                            <th class="py-3 text-center w-10">D</th>
+                            <th class="py-3 text-center w-10">L</th>
+                            <th class="py-3 text-center w-10">GF</th>
+                            <th class="py-3 text-center w-10">GA</th>
+                            <th class="py-3 text-center w-10">+/-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="py-3 pl-4 flex items-center gap-3">
+                                <span class="text-slate-400 font-bold w-4">1</span>
+                                <span>Colombia</span>
+                            </td>
+                            <td class="text-center font-bold text-slate-800">7</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">1</td><td class="text-center">3</td>
+                        </tr>
+                        <tr class="bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50 transition-colors">
+                            <td class="py-3 pl-3 flex items-center gap-3">
+                                <span class="text-slate-400 font-bold w-4">2</span>
+                                <span class="font-bold text-slate-900">Portugal</span>
+                            </td>
+                            <td class="text-center font-black text-slate-900">5</td><td class="text-center">3</td><td class="text-center">1</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">6</td><td class="text-center">1</td><td class="text-center">5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="w-full min-w-max text-xs text-slate-600">
+                    <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
+                        <tr>
+                            <th class="text-left py-3 pl-4">Group H</th>
+                            <th class="py-3 text-center w-12">Pts</th>
+                            <th class="py-3 text-center w-10">GP</th>
+                            <th class="py-3 text-center w-10">W</th>
+                            <th class="py-3 text-center w-10">D</th>
+                            <th class="py-3 text-center w-10">L</th>
+                            <th class="py-3 text-center w-10">GF</th>
+                            <th class="py-3 text-center w-10">GA</th>
+                            <th class="py-3 text-center w-10">+/-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        <tr class="bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50 transition-colors">
+                            <td class="py-3 pl-3 flex items-center gap-3">
+                                <span class="text-slate-400 font-bold w-4">1</span>
+                                <span class="font-bold text-slate-900">Spain</span>
+                            </td>
+                            <td class="text-center font-black text-slate-900">7</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">5</td><td class="text-center">0</td><td class="text-center">5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}</div>
+                        <span class="text-sm font-bold text-slate-800">{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
+                    </div>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                </div>
+
+                <div class="space-y-2">
+                    @php $homeForm = $fixture->homeTeamForm ?? []; @endphp
+                    @forelse($homeForm as $match)
+                        @php
+                            // Determine Win/Draw/Loss color
+                            $isWin = false; $isDraw = false; $isLoss = false;
+                            $teamScore = $match->home_team_id == $fixture->home_team_id ? $match->home_score : $match->away_score;
+                            $oppScore = $match->home_team_id == $fixture->home_team_id ? $match->away_score : $match->home_score;
+                            
+                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
+                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
+                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
+                        @endphp
+                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
+                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
+                            </div>
+                            <div class="flex-1 flex items-center justify-center gap-4">
+                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
+                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
+                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
+                                </div>
+                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
+                            </div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
+                        </div>
+                    @empty
+                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-md bg-slate-500 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}</div>
+                        <span class="text-sm font-bold text-slate-800">{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
+                    </div>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                </div>
+
+                <div class="space-y-2">
+                    @php $awayForm = $fixture->awayTeamForm ?? []; @endphp
+                    @forelse($awayForm as $match)
+                        @php
+                            $isWin = false; $isDraw = false; $isLoss = false;
+                            $teamScore = $match->home_team_id == $fixture->away_team_id ? $match->home_score : $match->away_score;
+                            $oppScore = $match->home_team_id == $fixture->away_team_id ? $match->away_score : $match->home_score;
+                            
+                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
+                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
+                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
+                        @endphp
+                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
+                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
+                            </div>
+                            <div class="flex-1 flex items-center justify-center gap-4">
+                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
+                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
+                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
+                                </div>
+                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
+                            </div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
+                        </div>
+                    @empty
+                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
+                    @endforelse
                 </div>
             </div>
 
