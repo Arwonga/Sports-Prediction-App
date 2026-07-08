@@ -31,8 +31,14 @@
                 
                 <!-- Home Team -->
                 <div class="flex flex-col items-center gap-4">
-                    <div class="w-28 h-28 bg-slate-800 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100 uppercase">
-                        {{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}
+                    <div class="w-28 h-28 bg-white rounded-2xl shadow-md flex items-center justify-center border border-slate-100 overflow-hidden p-3">
+                        @if($fixture->homeTeam->logo_url)
+                            <img src="{{ $fixture->homeTeam->logo_url }}" alt="{{ $fixture->homeTeam->name }}" class="w-full h-full object-contain">
+                        @else
+                            <div class="w-full h-full bg-slate-800 rounded-xl flex items-center justify-center text-white font-black text-3xl uppercase">
+                                {{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -73,8 +79,14 @@
 
                 <!-- Away Team -->
                 <div class="flex flex-col items-center gap-4">
-                    <div class="w-28 h-28 bg-slate-800 rounded-2xl shadow-md flex items-center justify-center text-white font-black text-3xl border border-slate-100 uppercase">
-                        {{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}
+                    <div class="w-28 h-28 bg-white rounded-2xl shadow-md flex items-center justify-center border border-slate-100 overflow-hidden p-3">
+                        @if($fixture->awayTeam->logo_url)
+                            <img src="{{ $fixture->awayTeam->logo_url }}" alt="{{ $fixture->awayTeam->name }}" class="w-full h-full object-contain">
+                        @else
+                            <div class="w-full h-full bg-slate-800 rounded-xl flex items-center justify-center text-white font-black text-3xl uppercase">
+                                {{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}
+                            </div>
+                        @endif
                     </div>
                 </div>
 
