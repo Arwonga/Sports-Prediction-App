@@ -134,11 +134,15 @@
                         </td>
 
         <!-- 4. Full Time Score -->
-        <td class="py-4 text-xs font-black text-slate-900 text-center">
-            @if($isPlayed)
-                <span class="bg-slate-200 px-2 py-1 rounded shadow-inner">{{ $homeScore }} - {{ $awayScore }}</span>
+        <td class="py-4 text-center">
+            @if(!is_null($fixture->home_score) && !is_null($fixture->away_score))
+                <div class="flex flex-col items-center justify-center">
+                    <span class="font-black text-slate-800 text-sm tracking-widest bg-slate-100 px-2 py-1 rounded shadow-inner">
+                        {{ $fixture->home_score }} - {{ $fixture->away_score }}
+                    </span>
+                </div>
             @else
-                <span class="text-slate-400">-</span>
+                <span class="text-slate-300 font-black text-sm">-</span>
             @endif
         </td>
 
