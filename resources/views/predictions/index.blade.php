@@ -128,10 +128,49 @@
 
                         <!-- 3. Final Verdict Bubble -->
                         <td class="py-4 text-center">
-                            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded-sm shadow-sm uppercase tracking-wide">
-                                {{ $pred->verdict ?? 'NO BET' }}
-                            </span>
-                        </td>
+                                @php
+                                    $verdict = 'AWAITING DATA';
+                                    
+                                    if ($fixture->prediction) {
+                                        // 1. Fetch 1X2 Probabilities
+                                        $homeProb = $fixture->prediction->home_win_prob ?? 0;
+                                        $drawProb = $fixture->prediction->draw_prob ?? 0;
+                                        $awayProb = $fixture->prediction->away_win_prob ?? 0;
+                                        
+                                        // 2. Fetch and Sort Goal/Action Markets (The Fallback)
+                                        $goalMarkets = [
+                                            'OVER 2.5' => $fixture->prediction->over_25_prob ?? 0,
+                                            'UNDER 2.5' => $fixture->prediction->under_25_prob ?? 0,
+                                            'BTTS YES' => $fixture->prediction->btts_yes_prob ?? 0,
+                                            'BTTS NO' => $fixture->prediction->btts_no_prob ?? 0,
+                                        ];
+                                        arsort($goalMarkets);
+                                        $bestGoalMarket = key($goalMarkets); // Gets the name of the highest goal market
+                                        
+                                        // 3. The Quantitative Filter (Risk Management)
+                                        // Any win probability below this percentage is considered "too tricky"
+                                        $confidenceThreshold = 40; 
+
+                                        if ($drawProb >= $homeProb && $drawProb >= $awayProb) {
+                                            // RISK DETECTED: Draw is the most likely outcome. Pivot to goals.
+                                            $verdict = $bestGoalMarket;
+                                        } elseif ($homeProb > $awayProb && $homeProb >= $confidenceThreshold) {
+                                            // STRONG SIGNAL: Home team has the edge and passes the safety threshold.
+                                            $verdict = 'HOME WIN';
+                                        } elseif ($awayProb > $homeProb && $awayProb >= $confidenceThreshold) {
+                                            // STRONG SIGNAL: Away team has the edge and passes the safety threshold.
+                                            $verdict = 'AWAY WIN';
+                                        } else {
+                                            // TRICKY MATCH: No clear favorite passes the confidence threshold. Pivot to goals.
+                                            $verdict = $bestGoalMarket;
+                                        }
+                                    }
+                                @endphp
+                                
+                                <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded shadow-sm uppercase whitespace-nowrap">
+                                    {{ strtoupper($verdict) }}
+                                </span>
+                            </td>
 
         <!-- 4. Full Time Score -->
         <td class="py-4 text-center">
