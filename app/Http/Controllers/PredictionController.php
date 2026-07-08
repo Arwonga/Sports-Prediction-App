@@ -39,10 +39,58 @@ class PredictionController extends Controller
      */
     public function show($id)
     {
-    // Fetch the fixture with its related teams and calculated prediction engine records
-    $fixture = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])->findOrFail($id);
+        // 1. Fetch the Core Match with its vital relationships
+        $fixture = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])->findOrFail($id);
 
-    // Return the detailed analysis template
-    return view('predictions.show', compact('fixture'));
+        // 2. Fetch Head-to-Head (H2H) Data
+        $h2h = Fixture::with(['homeTeam', 'awayTeam'])
+            ->where(function ($query) use ($fixture) {
+                $query->where('home_team_id', $fixture->home_team_id)
+                      ->where('away_team_id', $fixture->away_team_id);
+            })
+            ->orWhere(function ($query) use ($fixture) {
+                $query->where('home_team_id', $fixture->away_team_id)
+                      ->where('away_team_id', $fixture->home_team_id);
+            })
+            ->where('match_at', '<', $fixture->match_at)
+            ->whereNotNull('home_score') 
+            ->orderBy('match_at', 'desc')
+            ->take(10) 
+            ->get();
+
+        // 3. Fetch Home Team Recent Form
+        $homeTeamForm = Fixture::with(['homeTeam', 'awayTeam'])
+            ->where(function ($query) use ($fixture) {
+                $query->where('home_team_id', $fixture->home_team_id)
+                      ->orWhere('away_team_id', $fixture->home_team_id);
+            })
+            ->where('match_at', '<', $fixture->match_at)
+            ->whereNotNull('home_score')
+            ->orderBy('match_at', 'desc')
+            ->take(6)
+            ->get();
+
+        // 4. Fetch Away Team Recent Form
+        $awayTeamForm = Fixture::with(['homeTeam', 'awayTeam'])
+            ->where(function ($query) use ($fixture) {
+                $query->where('home_team_id', $fixture->away_team_id)
+                      ->orWhere('away_team_id', $fixture->away_team_id);
+            })
+            ->where('match_at', '<', $fixture->match_at)
+            ->whereNotNull('home_score')
+            ->orderBy('match_at', 'desc')
+            ->take(6)
+            ->get();
+
+        // 5. Attach the dynamic arrays directly to the $fixture object 
+        $fixture->h2h = $h2h;
+        $fixture->homeTeamForm = $homeTeamForm;
+        $fixture->awayTeamForm = $awayTeamForm;
+        
+        // Standings
+        $fixture->homeStandings = [];
+        $fixture->awayStandings = [];
+
+        return view('predictions.show', compact('fixture'));
     }
 }

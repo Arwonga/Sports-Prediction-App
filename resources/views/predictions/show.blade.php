@@ -178,6 +178,94 @@
             </div>
         </div>
 
+        <!-- Recent Form -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}</div>
+                        <span class="text-sm font-bold text-slate-800">{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
+                    </div>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                </div>
+
+                <div class="space-y-2">
+                    @php $homeForm = $fixture->homeTeamForm ?? []; @endphp
+                    @forelse($homeForm as $match)
+                        @php
+                            // Determine Win/Draw/Loss color
+                            $isWin = false; $isDraw = false; $isLoss = false;
+                            $teamScore = $match->home_team_id == $fixture->home_team_id ? $match->home_score : $match->away_score;
+                            $oppScore = $match->home_team_id == $fixture->home_team_id ? $match->away_score : $match->home_score;
+                            
+                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
+                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
+                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
+                        @endphp
+                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
+                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
+                            </div>
+                            <div class="flex-1 flex items-center justify-center gap-4">
+                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
+                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
+                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
+                                </div>
+                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
+                            </div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
+                        </div>
+                    @empty
+                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
+                    @endforelse
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-md bg-slate-500 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}</div>
+                        <span class="text-sm font-bold text-slate-800">{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
+                    </div>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                </div>
+
+                <div class="space-y-2">
+                    @php $awayForm = $fixture->awayTeamForm ?? []; @endphp
+                    @forelse($awayForm as $match)
+                        @php
+                            $isWin = false; $isDraw = false; $isLoss = false;
+                            $teamScore = $match->home_team_id == $fixture->away_team_id ? $match->home_score : $match->away_score;
+                            $oppScore = $match->home_team_id == $fixture->away_team_id ? $match->away_score : $match->home_score;
+                            
+                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
+                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
+                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
+                        @endphp
+                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
+                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
+                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
+                            </div>
+                            <div class="flex-1 flex items-center justify-center gap-4">
+                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
+                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
+                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
+                                </div>
+                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
+                            </div>
+                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
+                        </div>
+                    @empty
+                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
+                    @endforelse
+                </div>
+            </div>
+
+        </div>
+
         <!-- 2-Column Grid for H2H and Match Intro -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             
@@ -282,46 +370,18 @@
 
         </div>
 
+        <!-- League Standing -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6">
             <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Standings of Both Teams</h3>
             
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-max text-xs text-slate-600 mb-6">
-                    <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
-                        <tr>
-                            <th class="text-left py-3 pl-4">Group K</th>
-                            <th class="py-3 text-center w-12">Pts</th>
-                            <th class="py-3 text-center w-10">GP</th>
-                            <th class="py-3 text-center w-10">W</th>
-                            <th class="py-3 text-center w-10">D</th>
-                            <th class="py-3 text-center w-10">L</th>
-                            <th class="py-3 text-center w-10">GF</th>
-                            <th class="py-3 text-center w-10">GA</th>
-                            <th class="py-3 text-center w-10">+/-</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50">
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="py-3 pl-4 flex items-center gap-3">
-                                <span class="text-slate-400 font-bold w-4">1</span>
-                                <span>Colombia</span>
-                            </td>
-                            <td class="text-center font-bold text-slate-800">7</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">1</td><td class="text-center">3</td>
-                        </tr>
-                        <tr class="bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50 transition-colors">
-                            <td class="py-3 pl-3 flex items-center gap-3">
-                                <span class="text-slate-400 font-bold w-4">2</span>
-                                <span class="font-bold text-slate-900">Portugal</span>
-                            </td>
-                            <td class="text-center font-black text-slate-900">5</td><td class="text-center">3</td><td class="text-center">1</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">6</td><td class="text-center">1</td><td class="text-center">5</td>
-                        </tr>
-                    </tbody>
-                </table>
-
+            <div class="overflow-x-auto space-y-8">
+                
+                @php $homeStandings = $fixture->homeStandings ?? []; @endphp
+                @if(count($homeStandings) > 0)
                 <table class="w-full min-w-max text-xs text-slate-600">
                     <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
                         <tr>
-                            <th class="text-left py-3 pl-4">Group H</th>
+                            <th class="text-left py-3 pl-4">{{ $fixture->league->name ?? 'League' }} (Home)</th>
                             <th class="py-3 text-center w-12">Pts</th>
                             <th class="py-3 text-center w-10">GP</th>
                             <th class="py-3 text-center w-10">W</th>
@@ -333,104 +393,71 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
-                        <tr class="bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50 transition-colors">
+                        @foreach($homeStandings as $row)
+                        <tr class="{{ $row->team_id == $fixture->home_team_id ? 'bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50' : 'hover:bg-slate-50' }} transition-colors">
                             <td class="py-3 pl-3 flex items-center gap-3">
-                                <span class="text-slate-400 font-bold w-4">1</span>
-                                <span class="font-bold text-slate-900">Spain</span>
+                                <span class="text-slate-400 font-bold w-4 text-right">{{ $row->rank }}</span>
+                                <span class="{{ $row->team_id == $fixture->home_team_id ? 'font-bold text-slate-900' : '' }}">{{ $row->team->name ?? 'Team' }}</span>
                             </td>
-                            <td class="text-center font-black text-slate-900">7</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">5</td><td class="text-center">0</td><td class="text-center">5</td>
+                            <td class="text-center font-black text-slate-900">{{ $row->points }}</td>
+                            <td class="text-center">{{ $row->played }}</td>
+                            <td class="text-center">{{ $row->win }}</td>
+                            <td class="text-center">{{ $row->draw }}</td>
+                            <td class="text-center">{{ $row->lose }}</td>
+                            <td class="text-center">{{ $row->goals_for }}</td>
+                            <td class="text-center">{{ $row->goals_against }}</td>
+                            <td class="text-center">{{ $row->goals_diff }}</td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
+                @else
+                    <div class="text-center text-xs text-slate-400 font-bold mb-4">No league standings found for {{ $fixture->homeTeam->name ?? 'Home Team' }}.</div>
+                @endif
+
+                @php $awayStandings = $fixture->awayStandings ?? []; @endphp
+                @if(count($awayStandings) > 0)
+                <table class="w-full min-w-max text-xs text-slate-600">
+                    <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
+                        <tr>
+                            <th class="text-left py-3 pl-4">{{ $fixture->league->name ?? 'League' }} (Away)</th>
+                            <th class="py-3 text-center w-12">Pts</th>
+                            <th class="py-3 text-center w-10">GP</th>
+                            <th class="py-3 text-center w-10">W</th>
+                            <th class="py-3 text-center w-10">D</th>
+                            <th class="py-3 text-center w-10">L</th>
+                            <th class="py-3 text-center w-10">GF</th>
+                            <th class="py-3 text-center w-10">GA</th>
+                            <th class="py-3 text-center w-10">+/-</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-50">
+                        @foreach($awayStandings as $row)
+                        <tr class="{{ $row->team_id == $fixture->away_team_id ? 'bg-yellow-50/60 border-l-4 border-yellow-400 hover:bg-yellow-100/50' : 'hover:bg-slate-50' }} transition-colors">
+                            <td class="py-3 pl-3 flex items-center gap-3">
+                                <span class="text-slate-400 font-bold w-4 text-right">{{ $row->rank }}</span>
+                                <span class="{{ $row->team_id == $fixture->away_team_id ? 'font-bold text-slate-900' : '' }}">{{ $row->team->name ?? 'Team' }}</span>
+                            </td>
+                            <td class="text-center font-black text-slate-900">{{ $row->points }}</td>
+                            <td class="text-center">{{ $row->played }}</td>
+                            <td class="text-center">{{ $row->win }}</td>
+                            <td class="text-center">{{ $row->draw }}</td>
+                            <td class="text-center">{{ $row->lose }}</td>
+                            <td class="text-center">{{ $row->goals_for }}</td>
+                            <td class="text-center">{{ $row->goals_against }}</td>
+                            <td class="text-center">{{ $row->goals_diff }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                @else
+                    <div class="text-center text-xs text-slate-400 font-bold">No league standings found for {{ $fixture->awayTeam->name ?? 'Away Team' }}.</div>
+                @endif
+
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <div class="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}</div>
-                        <span class="text-sm font-bold text-slate-800">{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
-                    </div>
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
-                </div>
-
-                <div class="space-y-2">
-                    @php $homeForm = $fixture->homeTeamForm ?? []; @endphp
-                    @forelse($homeForm as $match)
-                        @php
-                            // Determine Win/Draw/Loss color
-                            $isWin = false; $isDraw = false; $isLoss = false;
-                            $teamScore = $match->home_team_id == $fixture->home_team_id ? $match->home_score : $match->away_score;
-                            $oppScore = $match->home_team_id == $fixture->home_team_id ? $match->away_score : $match->home_score;
-                            
-                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
-                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
-                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
-                        @endphp
-                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
-                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
-                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
-                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
-                            </div>
-                            <div class="flex-1 flex items-center justify-center gap-4">
-                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
-                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
-                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
-                                </div>
-                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
-                            </div>
-                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
-                        </div>
-                    @empty
-                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
-                    @endforelse
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <div class="w-6 h-6 rounded-md bg-slate-500 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}</div>
-                        <span class="text-sm font-bold text-slate-800">{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
-                    </div>
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
-                </div>
-
-                <div class="space-y-2">
-                    @php $awayForm = $fixture->awayTeamForm ?? []; @endphp
-                    @forelse($awayForm as $match)
-                        @php
-                            $isWin = false; $isDraw = false; $isLoss = false;
-                            $teamScore = $match->home_team_id == $fixture->away_team_id ? $match->home_score : $match->away_score;
-                            $oppScore = $match->home_team_id == $fixture->away_team_id ? $match->away_score : $match->home_score;
-                            
-                            if($teamScore > $oppScore) { $isWin = true; $bgColor = 'bg-green-100/50 border-green-200'; $textColor = 'text-green-700'; }
-                            elseif($teamScore == $oppScore) { $isDraw = true; $bgColor = 'bg-yellow-100/50 border-yellow-200'; $textColor = 'text-yellow-700'; }
-                            else { $isLoss = true; $bgColor = 'bg-red-100/50 border-red-200'; $textColor = 'text-red-700'; }
-                        @endphp
-                        <div class="flex items-center justify-between text-xs hover:bg-slate-50 p-2.5 rounded-xl transition-colors group">
-                            <div class="text-[10px] text-slate-400 font-bold w-12 leading-tight">
-                                {{ \Carbon\Carbon::parse($match->match_date)->format('d/m') }}<br>
-                                {{ \Carbon\Carbon::parse($match->match_date)->format('Y') }}
-                            </div>
-                            <div class="flex-1 flex items-center justify-center gap-4">
-                                <span class="text-slate-800 font-bold text-right w-24 truncate">{{ $match->homeTeam->name ?? 'Home' }}</span>
-                                <div class="flex flex-col items-center justify-center w-14 {{ $bgColor }} border rounded py-1">
-                                    <span class="font-black {{ $textColor }}">{{ $match->home_score }} - {{ $match->away_score }}</span>
-                                </div>
-                                <span class="text-slate-500 font-medium text-left w-24 truncate">{{ $match->awayTeam->name ?? 'Away' }}</span>
-                            </div>
-                            <div class="text-[9px] text-slate-400 font-bold uppercase w-8 text-right">{{ substr($match->league->name ?? 'LGE', 0, 3) }}</div>
-                        </div>
-                    @empty
-                        <div class="text-center text-xs text-slate-400 py-6 font-bold">No recent matches found.</div>
-                    @endforelse
-                </div>
-            </div>
-
-        </div>
+        
 
     </div>
 </x-layout>
