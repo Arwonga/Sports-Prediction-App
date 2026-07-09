@@ -84,6 +84,11 @@ class CalculatePredictions extends Command
                     'under_25_prob' => $probabilities['under_25'],
                     'btts_yes_prob' => $probabilities['btts_yes'],
                     'btts_no_prob'  => $probabilities['btts_no'],
+                    'home_xg'       => $xgData['home_xg'],
+                    'away_xg'       => $xgData['away_xg'],
+                    'top_scores'    => '[]',
+                    'verdict'       => 'CALCULATED',
+                    'confidence'    => 0,
                 ]
             );
         }

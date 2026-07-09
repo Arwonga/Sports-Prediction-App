@@ -209,7 +209,7 @@
                                 <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
                                     <h4 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Top Scores</h4>
                                     <div class="space-y-1">
-                                        @if(isset($fixture->prediction->top_scores))
+                                        @if(isset($fixture->prediction->top_scores) && is_iterable($fixture->prediction->top_scores))
                                         @foreach($fixture->prediction->top_scores as $score => $prob)
                                             <div class="flex justify-between text-xs font-bold text-slate-300">
                                             <span>{{ $score }}</span> <span class="text-yellow-400">{{ $prob }}%</span>

@@ -8,9 +8,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Prediction extends Model
 {
     protected $fillable = [
-        'fixture_id', 'home_win_prob', 'away_win_prob', 'btts_yes_prob', 'btts_no_prob',
-        'over_25_prob', 'under_25_prob', 'home_xg', 'away_xg', 'top_scores', 
-        'verdict', 'confidence', 'risk', 'value'
+        'fixture_id', 
+        'home_win_prob', 
+        'away_win_prob',
+        'draw_prob', 
+        'btts_yes_prob', 
+        'btts_no_prob',
+        'over_25_prob', 
+        'under_25_prob', 
+        'home_xg', 
+        'away_xg', 
+        'top_scores', 
+        'verdict', 
+        'confidence', 
+        'risk', 
+        'value',
+        'top_scores',
+        'verdict',
+        'confidence',
     ];
 
     protected $casts = [
