@@ -45,9 +45,11 @@ class CalculatePredictions extends Command
     {
         $this->info('Initializing Ensemble Prediction Engine...');
 
-        // Fetch upcoming fixtures from today onward to calculate mathematical edges
+        // Fetch upcoming fixtures from today onward, BUT lock out anything that has started
         $fixtures = Fixture::with(['homeTeam', 'awayTeam'])
             ->where('match_at', '>=', Carbon::today()->startOfDay())
+            ->whereNull('home_score') // SHIELD 1: If a score exists, NEVER recalculate
+            ->where('status', 'NS')   // SHIELD 2: Only predict matches labeled 'Not Started'
             ->get();
 
         if ($fixtures->isEmpty()) {

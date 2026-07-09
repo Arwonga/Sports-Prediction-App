@@ -17,6 +17,27 @@ class PredictionController extends Controller
         $leagueId = $request->query('league_id', 39); 
         $date = $request->query('date', \Carbon\Carbon::today()->format('Y-m-d'));
 
+        // 1. Get the requested date from the URL (defaults to today if none is clicked)
+        $selectedDateString = $request->query('date', Carbon::today()->toDateString());
+        $selectedDate = Carbon::parse($selectedDateString);
+
+        // 2. Generate the 5 navigation dates dynamically (2 days ago -> 2 days ahead)
+        $navigationDates = [];
+        for ($i = -2; $i <= 2; $i++) {
+            $navDate = Carbon::today()->addDays($i);
+            $navigationDates[] = [
+                'label' => $navDate->isToday() ? 'Today' : $navDate->format('D'), // E.g., 'Sat', 'Sun', 'Today'
+                'date_string' => $navDate->toDateString(), // E.g., '2026-07-08'
+                'is_active' => $navDate->isSameDay($selectedDate) // True if this is the currently viewed date
+            ];
+        }
+
+        // 3. Fetch fixtures specifically for the selected date
+        $fixtures = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
+            ->whereDate('match_at', $selectedDate->toDateString())
+            ->orderBy('match_at', 'asc')
+            ->get();
+
         // Fetch Right Sidebar Data
         $standings = $api->getStandings($leagueId) ?? [];
         $featuredMatches = \App\Models\Fixture::with(['homeTeam', 'awayTeam'])
@@ -32,7 +53,7 @@ class PredictionController extends Controller
             ->whereDate('match_at', $date)
             ->get();
 
-        return view('predictions.index', compact('fixtures', 'leagueId', 'date'));
+        return view('predictions.index', compact('fixtures', 'leagueId', 'navigationDates', 'selectedDate', 'date'));
     }
     /**
      * Display the detailed Match Centre for a specific fixture.

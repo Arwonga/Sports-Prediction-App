@@ -8,29 +8,14 @@ use App\Models\Team;
 use App\Models\Fixture;
 use Carbon\Carbon;
 
-/**
- * Command to manually or automatically sync sports fixtures and teams from the API.
- * Author: Alex James Arwonga
- */
 class SyncFixtures extends Command
 {
-    /**
-     * The name and signature of the console command.
-     * Format: php artisan sports:sync-fixtures {date?} (YYYY-MM-DD)
-     */
     protected $signature = 'sports:sync-fixtures {date?}';
-
-    /**
-     * The console command description.
-     */
     protected $description = 'Fetch and sync fixtures along with their teams from the external Sports API for a given date';
 
-    /**
-     * Execute the console command.
-     */
     public function handle(SportsApiService $apiService): int
     {
-        // Default to today if no date parameter is passed
+        // Default strictly to today if no date is passed
         $date = $this->argument('date') ?? Carbon::today()->toDateString();
         
         $this->info("Starting sync for date: {$date}...");
@@ -53,25 +38,17 @@ class SyncFixtures extends Command
                 continue;
             }
 
-            // 1. Sync Home Team
             $homeTeam = Team::updateOrCreate(
                 ['api_team_id' => $teamsInfo['home']['id']],
-                [
-                    'name' => $teamsInfo['home']['name'],
-                    'logo_url' => $teamsInfo['home']['logo'] ?? null,
-                ]
+                ['name' => $teamsInfo['home']['name'], 'logo_url' => $teamsInfo['home']['logo'] ?? null]
             );
 
-            // 2. Sync Away Team
             $awayTeam = Team::updateOrCreate(
                 ['api_team_id' => $teamsInfo['away']['id']],
-                [
-                    'name' => $teamsInfo['away']['name'],
-                    'logo_url' => $teamsInfo['away']['logo'] ?? null,
-                ]
+                ['name' => $teamsInfo['away']['name'], 'logo_url' => $teamsInfo['away']['logo'] ?? null]
             );
 
-            // 3. Sync Fixture
+            // This will create new matches OR update existing ones with the latest FT scores
             Fixture::updateOrCreate(
                 ['api_fixture_id' => $fixtureInfo['id']],
                 [

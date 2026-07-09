@@ -15,12 +15,15 @@
             </div>
         </div>
 
-        <div class="flex justify-center items-center gap-2 mt-2">
-            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Sat</button>
-            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Sun</button>
-            <button class="px-8 py-1.5 rounded-full text-xs font-bold bg-slate-700 text-white shadow-md border border-slate-600 transition-colors">Today</button>
-            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Tue</button>
-            <button class="px-5 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">Wed</button>
+        <!-- Date Navigation Tabs -->
+        <div class="flex items-center justify-center space-x-6 mt-4">
+            @foreach($navigationDates as $nav)
+                <a href="{{ url('/?date=' . $nav['date_string']) }}" 
+                class="px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 
+                {{ $nav['is_active'] ? 'bg-slate-700 text-white shadow-inner' : 'text-slate-400 hover:text-white' }}">
+                    {{ $nav['label'] }}
+                </a>
+            @endforeach
         </div>
     </div>
 
