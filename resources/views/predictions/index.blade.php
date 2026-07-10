@@ -5,7 +5,6 @@
     <div class="bg-slate-900 px-6 py-4 border-b-4 border-red-600">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold text-white tracking-wide">Precise Mathematical Predictions</h2>
-            
             <div class="flex items-center gap-3">
                 <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider">Form</span>
                 <label class="relative inline-flex items-center cursor-pointer">
@@ -15,7 +14,6 @@
             </div>
         </div>
 
-        <!-- Date Navigation Tabs -->
         <div class="flex items-center justify-center space-x-6 mt-4">
             @foreach($navigationDates as $nav)
                 <a href="{{ url('/?date=' . $nav['date_string']) }}" 
@@ -27,19 +25,18 @@
         </div>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm text-center whitespace-nowrap">
+    <div class="w-full pb-4">
+        <table class="w-full text-left border-collapse">
             <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
                 <tr>
                     <th class="py-4 pl-6 text-left">Home / Away</th>
-                    <th class="py-4">Win % <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
-                    <th class="py-4">BTTS % <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
-                    <th class="py-4">O/U 2.5 <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
-                    <th class="py-4">Avg <br> Goals</th>
-                    <th class="py-4">Coef. <br> &nbsp;</th>
-                    <th class="py-4">Verdict <br> &nbsp;</th>
-                    <th class="py-4">FT <br> Score</th>
-                    <th class="text-center font-bold text-slate-400 pb-3">OUTCOME</th>
+                    <th class="py-4 text-center">Win % <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
+                    <th class="py-4 text-center">BTTS % <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
+                    <th class="py-4 text-center">O/U 2.5 <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
+                    <th class="py-4 text-center whitespace-nowrap">Avg <br> Goals</th>
+                    <th class="py-4 text-center whitespace-nowrap">Coef. <br> &nbsp;</th>
+                    <th class="py-4 text-center whitespace-nowrap">Verdict <br> &nbsp;</th>
+                    <th class="py-4 text-center font-bold text-slate-400 pb-3">RESULT</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -60,8 +57,7 @@
                         $isPlayed = !is_null($homeScore) && !is_null($awayScore);
                     @endphp
                     <tr class="hover:bg-slate-50 transition-colors group">
-                        <!-- Teams & Match Time -->
-                        <td class="py-4 pl-6 text-left font-bold text-slate-800">
+                        <td class="py-4 pl-6 text-left font-bold text-slate-800 w-1/4">
                         <a href="{{ route('predictions.show', $fixture->id) }}" class="group/link block">
                             <div class="flex items-center gap-2 mb-1.5">
                                 <div class="flex items-center justify-center px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/20 rounded shadow-sm shrink-0">
@@ -87,155 +83,130 @@
                         </td>
 
                         <td class="py-4 text-xs font-bold text-center">
-            @php
-                $homeWin = $pred->home_win_prob ?? 57;
-                $awayWin = $pred->away_win_prob ?? 18;
-            @endphp
-            <div class="flex justify-center items-center gap-4">
-                <span class="w-6 text-right {{ $homeWin > $awayWin ? 'text-green-500' : 'text-slate-700' }}">{{ $homeWin }}</span>
-                <span class="w-6 text-left {{ $awayWin > $homeWin ? 'text-green-500' : 'text-slate-700' }}">{{ $awayWin }}</span>
-            </div>
-        </td>
+                            @php
+                                $homeWin = $pred->home_win_prob ?? 57;
+                                $awayWin = $pred->away_win_prob ?? 18;
+                            @endphp
+                            <div class="flex justify-center items-center gap-4">
+                                <span class="w-6 text-right {{ $homeWin > $awayWin ? 'text-green-500' : 'text-slate-700' }}">{{ $homeWin }}</span>
+                                <span class="w-6 text-left {{ $awayWin > $homeWin ? 'text-green-500' : 'text-slate-700' }}">{{ $awayWin }}</span>
+                            </div>
+                        </td>
 
-        <td class="py-4 text-xs font-bold text-center">
-            @php
-                $bttsYes = $pred->btts_yes_prob ?? 61;
-                $bttsNo = $pred->btts_no_prob ?? 39;
-            @endphp
-            <div class="flex justify-center items-center gap-4">
-                <span class="w-6 text-right {{ $bttsYes > $bttsNo ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsYes }}</span>
-                <span class="w-6 text-left {{ $bttsNo > $bttsYes ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsNo }}</span>
-            </div>
-        </td>
+                        <td class="py-4 text-xs font-bold text-center">
+                            @php
+                                $bttsYes = $pred->btts_yes_prob ?? 61;
+                                $bttsNo = $pred->btts_no_prob ?? 39;
+                            @endphp
+                            <div class="flex justify-center items-center gap-4">
+                                <span class="w-6 text-right {{ $bttsYes > $bttsNo ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsYes }}</span>
+                                <span class="w-6 text-left {{ $bttsNo > $bttsYes ? 'text-green-500' : 'text-slate-700' }}">{{ $bttsNo }}</span>
+                            </div>
+                        </td>
 
-        <td class="py-4 text-xs font-bold text-center">
-            @php
-                $over25 = $pred->over_25_prob ?? 60;
-                $under25 = $pred->under_25_prob ?? 40;
-            @endphp
-            <div class="flex justify-center items-center gap-4">
-                <span class="w-6 text-right {{ $over25 > $under25 ? 'text-green-500' : 'text-slate-700' }}">{{ $over25 }}</span>
-                <span class="w-6 text-left {{ $under25 > $over25 ? 'text-green-500' : 'text-slate-700' }}">{{ $under25 }}</span>
-            </div>
-        </td>
+                        <td class="py-4 text-xs font-bold text-center">
+                            @php
+                                $over25 = $pred->over_25_prob ?? 60;
+                                $under25 = $pred->under_25_prob ?? 40;
+                            @endphp
+                            <div class="flex justify-center items-center gap-4">
+                                <span class="w-6 text-right {{ $over25 > $under25 ? 'text-green-500' : 'text-slate-700' }}">{{ $over25 }}</span>
+                                <span class="w-6 text-left {{ $under25 > $over25 ? 'text-green-500' : 'text-slate-700' }}">{{ $under25 }}</span>
+                            </div>
+                        </td>
 
-                            <!-- 1. Average Goals Prediction -->
-                            <td class="py-4 text-xs font-bold text-slate-700 text-center">
-                                {{ number_format($avgGoals, 2) }}
-                            </td>
+                        <td class="py-4 text-xs font-bold text-slate-700 text-center whitespace-nowrap">
+                            {{ number_format($avgGoals, 2) }}
+                        </td>
 
-                        <!-- 2. Coefficient (Implied Odds) -->
-                        <td class="py-4 text-xs font-bold text-blue-600 text-center">
+                        <td class="py-4 text-xs font-bold text-blue-600 text-center whitespace-nowrap">
                             {{ number_format($coefficient, 2) }}
                         </td>
 
-                        <!-- 3. Final Verdict Bubble -->
-                        <td class="py-4 text-center">
-                                @php
-                                    $verdict = 'AWAITING DATA';
+                        <td class="py-4 text-center whitespace-nowrap">
+                            @php
+                                $verdict = 'AWAITING DATA';
+                                
+                                if ($fixture->prediction) {
+                                    $homeProb = $fixture->prediction->home_win_prob ?? 0;
+                                    $drawProb = $fixture->prediction->draw_prob ?? 0;
+                                    $awayProb = $fixture->prediction->away_win_prob ?? 0;
                                     
-                                    if ($fixture->prediction) {
-                                        // 1. Fetch 1X2 Probabilities
-                                        $homeProb = $fixture->prediction->home_win_prob ?? 0;
-                                        $drawProb = $fixture->prediction->draw_prob ?? 0;
-                                        $awayProb = $fixture->prediction->away_win_prob ?? 0;
-                                        
-                                        // 2. Fetch and Sort Goal/Action Markets (The Fallback)
-                                        $goalMarkets = [
-                                            'OVER 2.5' => $fixture->prediction->over_25_prob ?? 0,
-                                            'UNDER 2.5' => $fixture->prediction->under_25_prob ?? 0,
-                                            'BTTS YES' => $fixture->prediction->btts_yes_prob ?? 0,
-                                            'BTTS NO' => $fixture->prediction->btts_no_prob ?? 0,
-                                        ];
-                                        arsort($goalMarkets);
-                                        $bestGoalMarket = key($goalMarkets); // Gets the name of the highest goal market
-                                        
-                                        // 3. The Quantitative Filter (Risk Management)
-                                        // Any win probability below this percentage is considered "too tricky"
-                                        $confidenceThreshold = 40; 
+                                    $goalMarkets = [
+                                        'OVER 2.5' => $fixture->prediction->over_25_prob ?? 0,
+                                        'UNDER 2.5' => $fixture->prediction->under_25_prob ?? 0,
+                                        'BTTS YES' => $fixture->prediction->btts_yes_prob ?? 0,
+                                        'BTTS NO' => $fixture->prediction->btts_no_prob ?? 0,
+                                    ];
+                                    arsort($goalMarkets);
+                                    $bestGoalMarket = key($goalMarkets);
+                                    
+                                    $confidenceThreshold = 40; 
 
-                                        if ($drawProb >= $homeProb && $drawProb >= $awayProb) {
-                                            // RISK DETECTED: Draw is the most likely outcome. Pivot to goals.
-                                            $verdict = $bestGoalMarket;
-                                        } elseif ($homeProb > $awayProb && $homeProb >= $confidenceThreshold) {
-                                            // STRONG SIGNAL: Home team has the edge and passes the safety threshold.
-                                            $verdict = 'HOME WIN';
-                                        } elseif ($awayProb > $homeProb && $awayProb >= $confidenceThreshold) {
-                                            // STRONG SIGNAL: Away team has the edge and passes the safety threshold.
-                                            $verdict = 'AWAY WIN';
+                                    if ($drawProb >= $homeProb && $drawProb >= $awayProb) {
+                                        $verdict = $bestGoalMarket;
+                                    } elseif ($homeProb > $awayProb && $homeProb >= $confidenceThreshold) {
+                                        $verdict = 'HOME WIN';
+                                    } elseif ($awayProb > $homeProb && $awayProb >= $confidenceThreshold) {
+                                        $verdict = 'AWAY WIN';
+                                    } else {
+                                        $verdict = $bestGoalMarket;
+                                    }
+                                }
+                            @endphp
+                            
+                            <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded shadow-sm uppercase">
+                                {{ strtoupper($verdict) }}
+                            </span>
+                        </td>
+
+                        <td class="py-3 px-2 text-center align-middle whitespace-nowrap w-[80px]">
+                            <div class="flex flex-col items-center justify-center space-y-1">
+                                
+                                <span class="font-bold text-slate-600 text-xs tracking-wider">
+                                    {{ $fixture->home_score ?? '-' }} : {{ $fixture->away_score ?? '-' }}
+                                </span>
+                                
+                                @php
+                                    $outcomeStatus = 'PENDING';
+                                    $badgeClass = 'bg-slate-100 text-slate-400';
+
+                                    if (!is_null($fixture->home_score) && !is_null($fixture->away_score) && isset($verdict)) {
+                                        $h = (int) $fixture->home_score;
+                                        $a = (int) $fixture->away_score;
+                                        $totalGoals = $h + $a;
+                                        $isCorrect = false;
+                                        
+                                        $v = strtoupper($verdict);
+
+                                        if ($v === 'HOME WIN' && $h > $a) { $isCorrect = true; }
+                                        elseif ($v === 'AWAY WIN' && $a > $h) { $isCorrect = true; }
+                                        elseif ($v === 'DRAW' && $h === $a) { $isCorrect = true; }
+                                        elseif ($v === 'OVER 2.5' && $totalGoals > 2) { $isCorrect = true; }
+                                        elseif ($v === 'UNDER 2.5' && $totalGoals < 3) { $isCorrect = true; }
+                                        elseif ($v === 'BTTS YES' && $h > 0 && $a > 0) { $isCorrect = true; }
+                                        elseif ($v === 'BTTS NO' && ($h === 0 || $a === 0)) { $isCorrect = true; }
+
+                                        if ($isCorrect) {
+                                            $outcomeStatus = 'WON';
+                                            $badgeClass = 'bg-emerald-500 text-white shadow-sm';
                                         } else {
-                                            // TRICKY MATCH: No clear favorite passes the confidence threshold. Pivot to goals.
-                                            $verdict = $bestGoalMarket;
+                                            $outcomeStatus = 'LOST';
+                                            $badgeClass = 'bg-rose-500 text-white shadow-sm';
                                         }
                                     }
                                 @endphp
-                                
-                                <span class="bg-yellow-400 text-slate-900 text-[10px] font-black px-3 py-1.5 rounded shadow-sm uppercase whitespace-nowrap">
-                                    {{ strtoupper($verdict) }}
-                                </span>
-                            </td>
 
-                        <!-- 4. Full Time Score -->
-                        <td class="py-4 text-center">
-                            @if(!is_null($fixture->home_score) && !is_null($fixture->away_score))
-                                <div class="flex flex-col items-center justify-center">
-                                    <span class="font-black text-slate-800 text-sm tracking-widest bg-slate-100 px-2 py-1 rounded shadow-inner">
-                                        {{ $fixture->home_score }} - {{ $fixture->away_score }}
+                                @if($outcomeStatus !== 'PENDING')
+                                    <span class="{{ $badgeClass }} text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider inline-block">
+                                        {{ $outcomeStatus }}
                                     </span>
-                                </div>
-                            @else
-                                <span class="text-slate-300 font-black text-sm">-</span>
-                            @endif
+                                @endif
+
+                            </div>
                         </td>
-
-                        <td class="py-4 text-center">
-                    @php
-                        $outcomeStatus = 'PENDING';
-                        $badgeClass = 'bg-slate-100 text-slate-400';
-
-                        // Check if the match is finished (we have scores) and we have a verdict calculated
-                        if (!is_null($fixture->home_score) && !is_null($fixture->away_score) && isset($verdict)) {
-                            $h = (int) $fixture->home_score;
-                            $a = (int) $fixture->away_score;
-                            $totalGoals = $h + $a;
-                            $isCorrect = false;
-                            
-                            // Standardize the verdict string for exact matching
-                            $v = strtoupper($verdict);
-
-                            // The Verification Engine
-                            if ($v === 'HOME WIN' && $h > $a) { $isCorrect = true; }
-                            elseif ($v === 'AWAY WIN' && $a > $h) { $isCorrect = true; }
-                            elseif ($v === 'DRAW' && $h === $a) { $isCorrect = true; }
-                            elseif ($v === 'OVER 2.5' && $totalGoals > 2) { $isCorrect = true; }
-                            elseif ($v === 'UNDER 2.5' && $totalGoals < 3) { $isCorrect = true; }
-                            elseif ($v === 'BTTS YES' && $h > 0 && $a > 0) { $isCorrect = true; }
-                            elseif ($v === 'BTTS NO' && ($h === 0 || $a === 0)) { $isCorrect = true; }
-
-                            // Assign the final UI styling based on the result
-                            if ($isCorrect) {
-                                $outcomeStatus = 'WON';
-                                $badgeClass = 'bg-emerald-500 text-white shadow-sm';
-                            } else {
-                                $outcomeStatus = 'LOST';
-                                $badgeClass = 'bg-rose-500 text-white shadow-sm';
-                            }
-                        }
-                    @endphp
-
-                    @if($outcomeStatus === 'PENDING')
-                        <span class="text-slate-300 font-bold">-</span>
-                    @else
-                        <span class="{{ $badgeClass }} text-[10px] font-black px-3 py-1.5 rounded uppercase tracking-wider">
-                            {{ $outcomeStatus }}
-                        </span>
-                    @endif
-                </td>                  
-                    </tr>
-
-                    <tr id="markets-{{ $index }}" class="hidden bg-slate-900 border-b-4 border-slate-800">
-                        <td colspan="6" class="p-6">
-                            <div class="grid grid-cols-4 gap-6 text-left">
+                    </tr> <tr id="markets-{{ $index }}" class="hidden bg-slate-900 border-b-4 border-slate-800">
+                        <td colspan="8" class="p-6"> <div class="grid grid-cols-4 gap-6 text-left">
                                 <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
                                     <h4 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Expected Goals (xG)</h4>
                                     <div class="flex justify-between text-sm font-black text-white mb-2">
@@ -284,8 +255,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="py-12 text-center text-slate-400 text-sm font-semibold">
-                            No fixtures found for today.
+                        <td colspan="8" class="py-12 text-center text-slate-400 text-sm font-semibold"> No fixtures found for today.
                         </td>
                     </tr>
                 @endforelse
