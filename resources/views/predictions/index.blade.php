@@ -39,26 +39,26 @@
                     <th class="py-4">Coef. <br> &nbsp;</th>
                     <th class="py-4">Verdict <br> &nbsp;</th>
                     <th class="py-4">FT <br> Score</th>
-                    <th class="py-4 pr-6">More <br> &nbsp;</th>
+                    <th class="text-center font-bold text-slate-400 pb-3">OUTCOME</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
                 @forelse($fixtures ?? [] as $index => $fixture)
-    @php
-        $pred = $fixture->prediction;
-        
-        // 1. Calculate Average Goals on the fly (Home xG + Away xG)
-        $avgGoals = ($pred->home_xg ?? 0) + ($pred->away_xg ?? 0);
-        
-        // 2. Calculate Implied Odds (Coefficient) based on highest win probability
-        $maxProb = max($pred->home_win_prob ?? 1, $pred->away_win_prob ?? 1);
-        $coefficient = $maxProb > 0 ? (100 / $maxProb) : 0.00;
-        
-        // 3. Handle Full Time Score 
-        $homeScore = $fixture->home_goals; 
-        $awayScore = $fixture->away_goals;
-        $isPlayed = !is_null($homeScore) && !is_null($awayScore);
-    @endphp
+                    @php
+                        $pred = $fixture->prediction;
+                        
+                        // 1. Calculate Average Goals on the fly (Home xG + Away xG)
+                        $avgGoals = ($pred->home_xg ?? 0) + ($pred->away_xg ?? 0);
+                        
+                        // 2. Calculate Implied Odds (Coefficient) based on highest win probability
+                        $maxProb = max($pred->home_win_prob ?? 1, $pred->away_win_prob ?? 1);
+                        $coefficient = $maxProb > 0 ? (100 / $maxProb) : 0.00;
+                        
+                        // 3. Handle Full Time Score 
+                        $homeScore = $fixture->home_goals; 
+                        $awayScore = $fixture->away_goals;
+                        $isPlayed = !is_null($homeScore) && !is_null($awayScore);
+                    @endphp
                     <tr class="hover:bg-slate-50 transition-colors group">
                         <!-- Teams & Match Time -->
                         <td class="py-4 pl-6 text-left font-bold text-slate-800">
@@ -175,25 +175,62 @@
                                 </span>
                             </td>
 
-        <!-- 4. Full Time Score -->
-        <td class="py-4 text-center">
-            @if(!is_null($fixture->home_score) && !is_null($fixture->away_score))
-                <div class="flex flex-col items-center justify-center">
-                    <span class="font-black text-slate-800 text-sm tracking-widest bg-slate-100 px-2 py-1 rounded shadow-inner">
-                        {{ $fixture->home_score }} - {{ $fixture->away_score }}
-                    </span>
-                </div>
-            @else
-                <span class="text-slate-300 font-black text-sm">-</span>
-            @endif
-        </td>
+                        <!-- 4. Full Time Score -->
+                        <td class="py-4 text-center">
+                            @if(!is_null($fixture->home_score) && !is_null($fixture->away_score))
+                                <div class="flex flex-col items-center justify-center">
+                                    <span class="font-black text-slate-800 text-sm tracking-widest bg-slate-100 px-2 py-1 rounded shadow-inner">
+                                        {{ $fixture->home_score }} - {{ $fixture->away_score }}
+                                    </span>
+                                </div>
+                            @else
+                                <span class="text-slate-300 font-black text-sm">-</span>
+                            @endif
+                        </td>
 
-        <!-- 5. Toggle More Markets Button -->
-        <td class="py-4 pr-6 text-center">
-            <button onclick="document.getElementById('markets-{{ $index }}').classList.toggle('hidden')" class="text-slate-400 hover:text-blue-600 transition-colors">
-                <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-        </td>                  
+                        <td class="py-4 text-center">
+                    @php
+                        $outcomeStatus = 'PENDING';
+                        $badgeClass = 'bg-slate-100 text-slate-400';
+
+                        // Check if the match is finished (we have scores) and we have a verdict calculated
+                        if (!is_null($fixture->home_score) && !is_null($fixture->away_score) && isset($verdict)) {
+                            $h = (int) $fixture->home_score;
+                            $a = (int) $fixture->away_score;
+                            $totalGoals = $h + $a;
+                            $isCorrect = false;
+                            
+                            // Standardize the verdict string for exact matching
+                            $v = strtoupper($verdict);
+
+                            // The Verification Engine
+                            if ($v === 'HOME WIN' && $h > $a) { $isCorrect = true; }
+                            elseif ($v === 'AWAY WIN' && $a > $h) { $isCorrect = true; }
+                            elseif ($v === 'DRAW' && $h === $a) { $isCorrect = true; }
+                            elseif ($v === 'OVER 2.5' && $totalGoals > 2) { $isCorrect = true; }
+                            elseif ($v === 'UNDER 2.5' && $totalGoals < 3) { $isCorrect = true; }
+                            elseif ($v === 'BTTS YES' && $h > 0 && $a > 0) { $isCorrect = true; }
+                            elseif ($v === 'BTTS NO' && ($h === 0 || $a === 0)) { $isCorrect = true; }
+
+                            // Assign the final UI styling based on the result
+                            if ($isCorrect) {
+                                $outcomeStatus = 'WON';
+                                $badgeClass = 'bg-emerald-500 text-white shadow-sm';
+                            } else {
+                                $outcomeStatus = 'LOST';
+                                $badgeClass = 'bg-rose-500 text-white shadow-sm';
+                            }
+                        }
+                    @endphp
+
+                    @if($outcomeStatus === 'PENDING')
+                        <span class="text-slate-300 font-bold">-</span>
+                    @else
+                        <span class="{{ $badgeClass }} text-[10px] font-black px-3 py-1.5 rounded uppercase tracking-wider">
+                            {{ $outcomeStatus }}
+                        </span>
+                    @endif
+                </td>                  
                     </tr>
 
                     <tr id="markets-{{ $index }}" class="hidden bg-slate-900 border-b-4 border-slate-800">
