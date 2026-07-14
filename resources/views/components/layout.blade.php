@@ -46,7 +46,7 @@
     </a>
             <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
             <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
-                The smart money runs on data
+                {{ __('The smart money runs on data') }}
             </div>
             </div>
 

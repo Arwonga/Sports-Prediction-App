@@ -4,7 +4,7 @@
     
     <div class="bg-slate-900 px-6 py-4 border-b-4 border-red-600">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-white tracking-wide">Precise Mathematical Predictions</h2>
+            <h2 class="text-lg font-bold text-white tracking-wide">{{ __('Precise Mathematical Predictions') }}</h2>
             <div class="flex items-center gap-3">
                 <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider">Form</span>
                 <label class="relative inline-flex items-center cursor-pointer">
@@ -29,14 +29,14 @@
         <table class="w-full text-left border-collapse">
             <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
                 <tr>
-                    <th class="py-4 pl-6 text-left">Home / Away</th>
-                    <th class="py-4 text-center">Win % <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
-                    <th class="py-4 text-center">BTTS % <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
-                    <th class="py-4 text-center">O/U 2.5 <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
-                    <th class="py-4 text-center whitespace-nowrap">Avg <br> Goals</th>
-                    <th class="py-4 text-center whitespace-nowrap">Coef. <br> &nbsp;</th>
-                    <th class="py-4 text-center whitespace-nowrap">Verdict <br> &nbsp;</th>
-                    <th class="py-4 text-center font-bold text-slate-400 pb-3">RESULT</th>
+                    <th class="py-4 pl-6 text-left">{{ __('Home / Away') }}</th>
+                    <th class="py-4 text-center">{{ __('Win %') }} <br> <span class="text-slate-500 font-black mt-1 block">1 &nbsp;&nbsp;&nbsp;&nbsp; 2</span></th>
+                    <th class="py-4 text-center">{{ __('BTTS %') }} <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
+                    <th class="py-4 text-center">{{ __('O/U 2.5') }} <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
+                    <th class="py-4 text-center whitespace-nowrap">{{ __('Avg Goals') }}</th>
+                    <th class="py-4 text-center whitespace-nowrap">{{ __('Coef.') }} <br> &nbsp;</th>
+                    <th class="py-4 text-center whitespace-nowrap">{{ __('Verdict') }} <br> &nbsp;</th>
+                    <th class="py-4 text-center font-bold text-slate-400 pb-3">{{ __('RESULT') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">

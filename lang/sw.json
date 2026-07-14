@@ -10,10 +10,22 @@
     "Home / Away": "Nyumbani / Ugenini",
     "Win %": "Ushindi %",
     "Avg Goals": "Wastani wa Mabao",
+    "Coef.": "Koef.",
     "Verdict": "Uamuzi",
     "RESULT": "MATOKEO",
     "Language": "Lugha",
     "Settings": "Mipangilio",
     "Time Zone": "Eneo la Saa",
-    "Save": "Hifadhi"
+    "Save": "Hifadhi",
+    "HOME WIN": "USHINDI NYUMBANI",
+    "AWAY WIN": "USHINDI UGENINI",
+    "DRAW": "SARE",
+    "OVER 2.5": "ZAIDI YA 2.5",
+    "UNDER 2.5": "CHINI YA 2.5",
+    "BTTS YES": "WOTE WAFUNGE NDIYO",
+    "BTTS NO": "WOTE WAFUNGE HAPANA",
+    "WON": "KUSHINDA",
+    "LOST": "KUPOTEZA",
+    "PENDING": "INASUBIRI",
+    "AWAITING DATA": "INASUBIRI DATA"
 }
