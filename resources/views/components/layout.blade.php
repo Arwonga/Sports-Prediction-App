@@ -90,10 +90,26 @@
             </ul>
             
             <!-- Language Selector -->
-            <div class="mt-5 flex justify-between items-center text-slate-600 hover:text-slate-900 cursor-pointer group">
-                <div class="flex items-center font-semibold"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg> Language</div>
-                <div class="flex items-center text-xs font-bold text-slate-800">English <svg class="w-3 h-3 ml-1 text-slate-400 group-hover:text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>
+            <div class="relative group cursor-pointer mt-4">
+        <div class="flex items-center justify-between text-slate-700 font-bold text-sm px-4 py-2 bg-slate-50 rounded-lg">
+            <div class="flex items-center gap-2 hover:text-red-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                Language
             </div>
+            <span class="text-xs uppercase bg-slate-200 px-2 py-0.5 rounded">{{ app()->getLocale() }}</span>
+        </div>
+    
+    <!-- The Dropdown Menu -->
+    <div class="absolute right-0 bottom-full mb-1 w-full bg-white rounded-lg shadow-xl border border-slate-200 hidden group-hover:block z-50 overflow-hidden">
+        <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">English</a>
+        <a href="{{ route('language.switch', 'sw') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Swahili</a>
+        <a href="{{ route('language.switch', 'es') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Español</a>
+        <a href="{{ route('language.switch', 'fr') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Français</a>
+        <a href="{{ route('language.switch', 'zh') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">中文 (Chinese)</a>
+        <a href="{{ route('language.switch', 'ar') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">العربية (Arabic)</a>
+        <a href="{{ route('language.switch', 'pt') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Português</a>
+    </div>
+</div>
         </div>
 
         <!-- Section 2: Settings -->
