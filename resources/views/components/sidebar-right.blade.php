@@ -1,24 +1,55 @@
 <aside class="w-[320px] bg-white border-l border-slate-200 p-4 shrink-0 h-full min-h-screen overflow-y-auto space-y-6">
     
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-slate-800 text-sm">June 2026</h3>
-            <div class="flex gap-3 text-slate-400 text-xs">
-                <button class="hover:text-blue-600">&lt;</button>
-                <button class="hover:text-blue-600">&gt;</button>
+        @php
+        // 1. Get the date from the URL (or default to today's real date)
+        $calDate = request('date') ? \Carbon\Carbon::parse(request('date')) : \Carbon\Carbon::now();
+        
+        // 2. Figure out the math for the current month
+        $startOfMonth = $calDate->copy()->startOfMonth();
+        $daysInMonth = $calDate->daysInMonth;
+        
+        // 3. Find out what day of the week the 1st lands on (1 = Monday, 7 = Sunday)
+        $startDayOfWeek = $startOfMonth->dayOfWeekIso; 
+        @endphp
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <!-- Month and Year Header -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800 text-sm">{{ $calDate->format('F Y') }}</h3>
+                <div class="flex gap-3 text-slate-400 text-xs font-bold">
+                    <!-- Functional Arrows to skip months -->
+                    <a href="{{ url('/?date=' . $calDate->copy()->subMonth()->toDateString()) }}" class="hover:text-slate-800 transition-colors">&lt;</a>
+                    <a href="{{ url('/?date=' . $calDate->copy()->addMonth()->toDateString()) }}" class="hover:text-slate-800 transition-colors">&gt;</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-y-3 text-center">
+                <!-- Day Headers (Mon, Tue, Wed...) -->
+                @foreach(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as $dayName)
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ $dayName }}</div>
+                @endforeach
+
+                <!-- Empty slots to push the 1st of the month to the correct weekday -->
+                @for($i = 1; $i < $startDayOfWeek; $i++)
+                    <div></div>
+                @endfor
+
+                <!-- The actual days of the month -->
+                @for($day = 1; $day <= $daysInMonth; $day++)
+                    @php
+                        $currentLoopDate = $calDate->copy()->day($day);
+                        $isActive = $currentLoopDate->isSameDay($calDate);
+                    @endphp
+                    
+                    <a href="{{ url('/?date=' . $currentLoopDate->toDateString()) }}" 
+                    class="text-xs font-bold w-7 h-7 mx-auto flex items-center justify-center rounded-full transition-all duration-200
+                    {{ $isActive ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-red-600' }}">
+                        <!-- Pads single digits with a zero (e.g., 01, 02) -->
+                        {{ str_pad($day, 2, '0', STR_PAD_LEFT) }}
+                    </a>
+                @endfor
             </div>
         </div>
-        <div class="grid grid-cols-7 gap-y-2 text-center text-xs font-bold text-slate-400 mb-2">
-            <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
-        </div>
-        <div class="grid grid-cols-7 gap-y-2 text-center text-sm font-medium text-slate-700">
-            <div class="py-1">01</div><div class="py-1">02</div><div class="py-1">03</div><div class="py-1">04</div><div class="py-1">05</div><div class="py-1">06</div><div class="py-1">07</div>
-            <div class="py-1">08</div><div class="py-1">09</div><div class="py-1">10</div><div class="py-1">11</div><div class="py-1">12</div><div class="py-1">13</div><div class="py-1">14</div>
-            <div class="py-1">15</div><div class="py-1">16</div><div class="py-1">17</div><div class="py-1">18</div><div class="py-1">19</div><div class="py-1">20</div><div class="py-1">21</div>
-            <div class="py-1">22</div><div class="py-1">23</div><div class="py-1">24</div><div class="py-1">25</div><div class="py-1">26</div><div class="py-1">27</div><div class="py-1">28</div>
-            <div class="py-1 bg-slate-800 text-white rounded-full font-bold shadow-md">29</div><div class="py-1">30</div>
-        </div>
-    </div>
 
     <div class="space-y-4">
         @forelse($featuredMatches ?? [] as $match)
