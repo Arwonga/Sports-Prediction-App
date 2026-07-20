@@ -49,7 +49,7 @@
         </div>
     @else
         <div class="pt-4 text-center text-sm text-slate-400 font-medium italic bg-slate-50 rounded-xl p-4 border border-slate-100">
-            Awaiting model calculation...
+            {{ __('Awaiting model calculation...') }}
         </div>
     @endif
 </div>

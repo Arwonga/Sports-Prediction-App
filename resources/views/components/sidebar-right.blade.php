@@ -56,7 +56,7 @@
             <div class="bg-slate-800 rounded-xl p-4 text-white shadow-lg border-t-4 border-red-500 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/10 rounded-bl-full"></div>
                 <div class="flex justify-between items-center mb-3 relative z-10">
-                    <span class="text-[10px] font-bold uppercase text-red-400 tracking-wider">Featured Match</span>
+                    <span class="text-[10px] font-bold uppercase text-red-400 tracking-wider">{{ __('Featured Match') }}</span>
                     <span class="bg-red-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">{{ $loop->iteration }}</span>
                 </div>
                 <div class="relative z-10">
@@ -73,21 +73,21 @@
             </div>
         @empty
             <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl text-xs text-center font-semibold text-slate-400">
-                No featured matches today.
+                {{ __('No featured matches today.') }}
             </div>
         @endforelse
     </div>
 
    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mt-6">
         <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 flex justify-between items-center">
-            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Regular Season Top 8</span>
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ __('Regular Season Top 8') }}</span>
         </div>
         <table class="w-full text-xs text-center">
             <thead class="bg-white">
                 <tr class="text-slate-400 text-[10px] uppercase tracking-wider">
-                    <th class="py-3 text-left pl-4 font-semibold">Team</th>
-                    <th class="py-3 font-semibold">PTS</th>
-                    <th class="py-3 font-semibold">GD</th>
+                    <th class="py-3 text-left pl-4 font-semibold">{{ __('Team') }}</th>
+                    <th class="py-3 font-semibold">{{ __('PTS') }}</th>
+                    <th class="py-3 font-semibold">{{ __('GD') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
@@ -107,7 +107,7 @@
                 @empty
                     <tr>
                         <td colspan="3" class="py-6 text-center text-slate-400 text-xs font-medium">
-                            Select a league to view live standings.
+                            {{ __('Select a league to view live standings.') }}
                         </td>
                     </tr>
                 @endforelse

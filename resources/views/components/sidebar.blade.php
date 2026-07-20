@@ -16,7 +16,7 @@
 
     <!-- Football Predictions Menu -->
     <div>
-        <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">Football</h3>
+        <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">{{ __('Football') }}</h3>
         <ul class="space-y-1">
             @php
                 $menuItems = [

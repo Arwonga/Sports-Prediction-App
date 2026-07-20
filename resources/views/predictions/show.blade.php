@@ -330,7 +330,7 @@
                         </div>
                     @empty
                         <div class="text-center text-xs text-slate-400 py-6 font-bold">
-                            No historical H2H data available yet.
+                            {{ __('No historical H2H data available yet.') }}
                         </div>
                     @endforelse
                 </div>
@@ -358,24 +358,24 @@
                 
                 <!-- View All Button -->
                 <div class="text-center mt-8">
-                    <button class="text-[10px] font-bold text-slate-500 border border-slate-200 rounded-full px-8 py-2.5 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm">View all</button>
+                    <button class="text-[10px] font-bold text-slate-500 border border-slate-200 rounded-full px-8 py-2.5 hover:bg-slate-50 hover:text-slate-800 transition-colors shadow-sm">{{ __('View all') }}</button>
                 </div>
             </div>
 
             <!-- Task 5: Match Intro (Dummy Data) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col">
-                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Match Intro</h3>
+                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">{{ __('Match Intro') }}</h3>
                 
                 <div class="text-sm text-slate-600 space-y-5 leading-relaxed flex-1">
                     <p>{{ $fixture->homeTeam->name ?? 'Home' }} and {{ $fixture->awayTeam->name ?? 'Away' }} meet in the {{ $fixture->league->name ?? 'League' }} at {{ $fixture->venue_name ?? 'the stadium' }} on {{ \Carbon\Carbon::parse($fixture->match_at)->format('j F Y') }}.</p>
                     
-                    <p>Looking at historical data, we have recorded {{ $totalMatches ?? 0 }} direct encounters between these two sides. {{ $fixture->homeTeam->name ?? 'The home team' }} has secured {{ $homeWins ?? 0 }} victories, while {{ $fixture->awayTeam->name ?? 'the visitors' }} have won {{ $awayWins ?? 0 }} times. They have drawn {{ $draws ?? 0 }} matches.</p>
+                    <p>{{ __('Looking at historical data, we have recorded') }} {{ $totalMatches ?? 0 }} {{ __('direct encounters between these two sides.') }} {{ $fixture->homeTeam->name ?? 'The home team' }} {{ __('has secured') }} {{ $homeWins ?? 0 }} {{ __('victories, while') }} {{ $fixture->awayTeam->name ?? 'the visitors' }} {{ __('have won') }} {{ $awayWins ?? 0 }} {{ __('times. They have drawn') }} {{ $draws ?? 0 }} {{ __('matches.') }}</p>
                     
                     <div class="mt-8 p-4 bg-yellow-50/80 rounded-xl border border-yellow-200/60 shadow-sm flex items-start gap-3">
                         <div class="mt-0.5 text-yellow-500">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         </div>
-                        <p class="font-bold text-slate-800">Our algorithm predicts the highest probability edge on the <span class="uppercase text-yellow-600 font-black">{{ $bestMarket ?? 'NO BET' }}</span> market.</p>
+                        <p class="font-bold text-slate-800">{{ __('Our algorithm predicts the highest probability edge on the') }} <span class="uppercase text-yellow-600 font-black">{{ $bestMarket ?? 'NO BET' }}</span> {{ __('market.') }}</p>
                     </div>
                 </div>
             </div>
@@ -384,7 +384,7 @@
 
         <!-- League Standing -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6">
-            <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Standings of Both Teams</h3>
+            <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">{{ __('Standings of Both Teams') }}</h3>
             
             <div class="overflow-x-auto space-y-8">
                 
@@ -394,14 +394,14 @@
                     <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
                         <tr>
                             <th class="text-left py-3 pl-4">{{ $fixture->league->name ?? 'League' }} (Home)</th>
-                            <th class="py-3 text-center w-12">Pts</th>
-                            <th class="py-3 text-center w-10">GP</th>
-                            <th class="py-3 text-center w-10">W</th>
-                            <th class="py-3 text-center w-10">D</th>
-                            <th class="py-3 text-center w-10">L</th>
-                            <th class="py-3 text-center w-10">GF</th>
-                            <th class="py-3 text-center w-10">GA</th>
-                            <th class="py-3 text-center w-10">+/-</th>
+                            <th class="py-3 text-center w-12">{{ __('Pts') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GP') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('W') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('D') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('L') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GF') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GA') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('+/-') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
@@ -424,7 +424,7 @@
                     </tbody>
                 </table>
                 @else
-                    <div class="text-center text-xs text-slate-400 font-bold mb-4">No league standings found for {{ $fixture->homeTeam->name ?? 'Home Team' }}.</div>
+                    <div class="text-center text-xs text-slate-400 font-bold mb-4">{{ __('No league standings found for') }} {{ $fixture->homeTeam->name ?? 'Home Team' }}.</div>
                 @endif
 
                 @php $awayStandings = $fixture->awayStandings ?? []; @endphp
@@ -433,14 +433,14 @@
                     <thead class="text-[10px] uppercase font-bold text-slate-400 border-b border-slate-100">
                         <tr>
                             <th class="text-left py-3 pl-4">{{ $fixture->league->name ?? 'League' }} (Away)</th>
-                            <th class="py-3 text-center w-12">Pts</th>
-                            <th class="py-3 text-center w-10">GP</th>
-                            <th class="py-3 text-center w-10">W</th>
-                            <th class="py-3 text-center w-10">D</th>
-                            <th class="py-3 text-center w-10">L</th>
-                            <th class="py-3 text-center w-10">GF</th>
-                            <th class="py-3 text-center w-10">GA</th>
-                            <th class="py-3 text-center w-10">+/-</th>
+                            <th class="py-3 text-center w-12">{{ __('Pts') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GP') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('W') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('D') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('L') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GF') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('GA') }}</th>
+                            <th class="py-3 text-center w-10">{{ __('+/-') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50">
@@ -463,7 +463,7 @@
                     </tbody>
                 </table>
                 @else
-                    <div class="text-center text-xs text-slate-400 font-bold">No league standings found for {{ $fixture->awayTeam->name ?? 'Away Team' }}.</div>
+                    <div class="text-center text-xs text-slate-400 font-bold">{{ __('No league standings found for') }} {{ $fixture->awayTeam->name ?? 'Away Team' }}.</div>
                 @endif
 
             </div>
