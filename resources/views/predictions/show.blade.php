@@ -7,8 +7,8 @@
             <!-- Top Toggles -->
             <div class="flex justify-center mb-6">
                 <div class="flex items-center bg-slate-100 rounded-full p-1 shadow-inner">
-                    <button class="px-6 py-1.5 text-xs font-bold bg-slate-800 text-white rounded-full shadow-sm">Prediction</button>
-                    <button class="px-6 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">Preview</button>
+                    <button class="px-6 py-1.5 text-xs font-bold bg-slate-800 text-white rounded-full shadow-sm">{{ __('Prediction') }}</button>
+                    <button class="px-6 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">{{ __('Preview') }}</button>
                 </div>
             </div>
 
@@ -95,13 +95,13 @@
         
         <!-- Market Navigation Tabs -->
         <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <button class="px-5 py-2 text-xs font-bold bg-slate-700 text-white rounded-full shadow-sm">Under/Over 2.5</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Half Time</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">HT/FT</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Btts</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Scorers</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Corners</button>
-            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">Cards</button>
+            <button class="px-5 py-2 text-xs font-bold bg-slate-700 text-white rounded-full shadow-sm">{{ __('Under/Over 2.5') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('Half Time') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('HT/FT') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('Btts') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('Scorers') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('Corners') }}</button>
+            <button class="px-5 py-2 text-xs font-bold text-slate-500 bg-white hover:bg-slate-50 hover:text-slate-800 rounded-full border border-slate-200 transition-colors shadow-sm">{{ __('Cards') }}</button>
         </div>
 
         <!-- The Quantitative Summary Row (Dynamic Data) -->
@@ -110,14 +110,14 @@
                 <table class="w-full min-w-max">
                     <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
                         <tr>
-                            <th class="py-4 pl-6 text-left">Teams</th>
-                            <th class="py-4 text-center">Prob. % <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
-                            <th class="py-4 text-center">Pred</th>
-                            <th class="py-4 text-center">Correct <br> Score</th>
-                            <th class="py-4 text-center">Avg. <br> Goals</th>
-                            <th class="py-4 text-center">Weather</th>
-                            <th class="py-4 text-center">Coef.</th>
-                            <th class="py-4 pr-6 text-center">Score</th>
+                            <th class="py-4 pl-6 text-left">{{ __('Teams') }}</th>
+                            <th class="py-4 text-center">{{ __('Prob. %') }} <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
+                            <th class="py-4 text-center">{{ __('Pred') }}</th>
+                            <th class="py-4 text-center">{{ __('Correct') }} <br> {{ __('Score') }}</th>
+                            <th class="py-4 text-center">{{ __('Avg.') }} <br> {{ __('Goals') }}</th>
+                            <th class="py-4 text-center">{{ __('Weather') }}
+                            <th class="py-4 text-center">{{ __('Coef.') }}</th>
+                            <th class="py-4 pr-6 text-center">{{ __('Score') }}</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm divide-y divide-slate-100">
@@ -199,7 +199,7 @@
                         <div class="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->homeTeam->name ?? 'HOM', 0, 3) }}</div>
                         <span class="text-sm font-bold text-slate-800">{{ $fixture->homeTeam->name ?? 'Home Team' }}</span>
                     </div>
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Recent Form') }}</h3>
                 </div>
 
                 <div class="space-y-2">
@@ -241,7 +241,7 @@
                         <div class="w-6 h-6 rounded-md bg-slate-500 flex items-center justify-center text-white text-[10px] font-black shadow-sm uppercase">{{ substr($fixture->awayTeam->name ?? 'AWA', 0, 3) }}</div>
                         <span class="text-sm font-bold text-slate-800">{{ $fixture->awayTeam->name ?? 'Away Team' }}</span>
                     </div>
-                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recent Form</h3>
+                    <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Recent Form') }}</h3>
                 </div>
 
                 <div class="space-y-2">
@@ -283,12 +283,12 @@
             
             <!-- Task 4: Head to Head (Dynamic Data) -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">Head to Head</h3>
+                <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest text-center mb-6">{{ __('Head to Head') }}</h3>
                 
                 <!-- Filters -->
                 <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-100 pb-4 justify-center">
-                    <button class="px-4 py-1.5 text-[10px] font-bold bg-slate-700 text-white rounded-full">All</button>
-                    <button class="px-4 py-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 rounded-full hover:bg-slate-100 border border-slate-100 transition-colors">League</button>
+                    <button class="px-4 py-1.5 text-[10px] font-bold bg-slate-700 text-white rounded-full">{{ __('All') }}</button>
+                    <button class="px-4 py-1.5 text-[10px] font-bold text-slate-500 bg-slate-50 rounded-full hover:bg-slate-100 border border-slate-100 transition-colors">{{ __('League') }}</button>
                 </div>
 
                 <!-- Match List -->
