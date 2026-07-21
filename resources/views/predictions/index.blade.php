@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-lg font-bold text-white tracking-wide">{{ __('Precise Mathematical Predictions') }}</h2>
             <div class="flex items-center gap-3">
-                <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider">{{ __('') }}</span>
+                <span class="text-xs text-slate-300 font-semibold uppercase tracking-wider">{{ __('Form') }}</span>
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" value="" class="sr-only peer">
                     <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-500 shadow-inner"></div>
