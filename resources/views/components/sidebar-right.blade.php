@@ -1,4 +1,4 @@
-<aside class="w-[320px] bg-white border-l border-slate-200 p-4 shrink-0 h-full min-h-screen overflow-y-auto space-y-6">
+<aside class="w-[320px] bg-white border-l border-slate-200 p-4 shrink-0 h-full min-h-screen overflow-y-auto space-y-6 relative z-10">
     
         @php
         // 1. Get the date from the URL (or default to today's real date)

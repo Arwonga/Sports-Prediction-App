@@ -64,84 +64,84 @@
     </div>
 
     <!-- More Menu Container -->
-    <div class="relative" id="more-menu-container">
+    <div class="relative flex items-center" id="more-menu-container">
         
         <!-- 3-Dot Trigger Button -->
-        <button onclick="toggleMoreMenu()" class="flex flex-col items-center justify-center text-slate-300 hover:text-white transition-colors group mt-1">
+        <button onclick="toggleMoreMenu()" class="flex flex-col items-center justify-center text-slate-300 hover:text-white transition-colors group px-2">
             <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01"></path>
             </svg>
             <span class="text-[9px] font-bold mt-0.5 tracking-wider">More</span>
         </button>
 
-    <!-- The Dropdown Panel -->
-    <div id="more-dropdown" class="hidden absolute right-0 mt-4 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 text-sm overflow-hidden transform opacity-100 scale-100">
-        
-        <!-- Section 1: Features -->
-        <div class="p-5 border-b border-slate-100">
-            <h3 class="font-black text-slate-800 mb-4 text-base">More</h3>
-            <ul class="space-y-4">
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Previews</a></li>
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> {{ __('Trends') }}</a></li>
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> {{ __('Top Trends') }}</a></li>
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0_9_9_9_9_9_9z"></path></svg> {{ __('Livescore') }}</a></li>
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> {{ __('Injured Players') }}</a></li>
-                <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> {{ __('Team Comparison') }}</a></li>
-            </ul>
-        </div>
-
-        <!-- Language Selector -->
-        <div class="relative group cursor-pointer mt-4">
-            <div class="flex items-center justify-between text-slate-700 font-bold text-sm px-4 py-2 bg-slate-50 rounded-lg">
-                <div class="flex items-center gap-2 hover:text-red-600 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                {{ __('Language') }}
+        <!-- The Dropdown Panel -->
+        <div id="more-dropdown" class="hidden absolute right-0 top-12 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-[99999] text-sm">
+            
+            <!-- Section 1: Features -->
+            <div class="p-5 border-b border-slate-100">
+                <h3 class="font-black text-slate-800 mb-4 text-base">More</h3>
+                <ul class="space-y-4">
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Previews</a></li>
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> {{ __('Trends') }}</a></li>
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> {{ __('Top Trends') }}</a></li>
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0_9_9_9_9_9_9z"></path></svg> {{ __('Livescore') }}</a></li>
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> {{ __('Injured Players') }}</a></li>
+                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> {{ __('Team Comparison') }}</a></li>
+                </ul>
             </div>
-            <span class="text-xs uppercase bg-slate-200 px-2 py-0.5 rounded">{{ app()->getLocale() }}</span>
-        </div>
-    
-    <!-- The Dropdown Menu -->
-    <div class="absolute right-0 bottom-full mb-1 w-full bg-white rounded-lg shadow-xl border border-slate-200 hidden group-hover:block z-50 overflow-hidden">
-        <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">English</a>
-        <a href="{{ route('language.switch', 'sw') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Swahili</a>
-        <a href="{{ route('language.switch', 'es') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Español</a>
-        <a href="{{ route('language.switch', 'fr') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Français</a>
-        <a href="{{ route('language.switch', 'zh') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">中文 (Chinese)</a>
-        <a href="{{ route('language.switch', 'ar') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">العربية (Arabic)</a>
-        <a href="{{ route('language.switch', 'pt') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Português</a>
-    </div>
-</div>
-        </div>
 
-        <!-- Section 2: Settings -->
-        <div class="p-5 border-b border-slate-100 bg-slate-50">
-            <h3 class="font-black text-slate-800 mb-4 text-base">{{ __('Settings') }}</h3>
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Time Zone</span>
-                    <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
-                        <option>BY DEFAULT</option>
-                        <option>Africa/Nairobi</option>
-                    </select>
+            <!-- Language Selector -->
+            <div class="relative group cursor-pointer p-5 border-b border-slate-100 bg-white">
+                <div class="flex items-center justify-between text-slate-700 font-bold text-sm px-4 py-2 bg-slate-50 rounded-lg">
+                    <div class="flex items-center gap-2 hover:text-red-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                        {{ __('Language') }}
+                    </div>
+                    <span class="text-xs uppercase bg-slate-200 px-2 py-0.5 rounded">{{ app()->getLocale() }}</span>
                 </div>
-                <div class="flex justify-between items-center">
-                    <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> % COEF</span>
-                    <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
-                        <option>Decimal (European)</option>
-                        <option>Fractional (UK)</option>
-                        <option>American (US)</option>
-                    </select>
+            
+                <!-- The Language Dropdown Menu (Fixed: Flyout to the left) -->
+                <div class="absolute right-full top-0 mr-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 hidden group-hover:block z-[999999] py-1">
+                    <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">English</a>
+                    <a href="{{ route('language.switch', 'sw') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Swahili</a>
+                    <a href="{{ route('language.switch', 'es') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Español</a>
+                    <a href="{{ route('language.switch', 'fr') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Français</a>
+                    <a href="{{ route('language.switch', 'zh') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">中文 (Chinese)</a>
+                    <a href="{{ route('language.switch', 'ar') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">العربية (Arabic)</a>
+                    <a href="{{ route('language.switch', 'pt') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Português</a>
                 </div>
-                <button class="w-full mt-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-black tracking-wide py-2.5 rounded-full transition-colors">Save</button>
             </div>
-        </div>
 
-        <!-- Section 3: About Us -->
-        <div class="p-5 bg-white">
-            <a href="#" class="flex justify-between items-center text-slate-800 font-black hover:text-red-600 transition-colors">
-                {{ __('About Us') }}
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7-7"></path></svg>
-            </a>
+            <!-- Section 2: Settings -->
+            <div class="p-5 border-b border-slate-100 bg-slate-50">
+                <h3 class="font-black text-slate-800 mb-4 text-base">{{ __('Settings') }}</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Time Zone</span>
+                        <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
+                            <option>BY DEFAULT</option>
+                            <option>Africa/Nairobi</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> % COEF</span>
+                        <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
+                            <option>Decimal (European)</option>
+                            <option>Fractional (UK)</option>
+                            <option>American (US)</option>
+                        </select>
+                    </div>
+                    <button class="w-full mt-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-black tracking-wide py-2.5 rounded-full transition-colors">Save</button>
+                </div>
+            </div>
+
+            <!-- Section 3: About Us -->
+            <div class="p-5 bg-white">
+                <a href="#" class="flex justify-between items-center text-slate-800 font-black hover:text-red-600 transition-colors">
+                    {{ __('About Us') }}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7-7"></path></svg>
+                </a>
+            </div>
         </div>
     </div>
 </div>
