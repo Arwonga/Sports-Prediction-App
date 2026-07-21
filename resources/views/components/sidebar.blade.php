@@ -36,6 +36,15 @@
                     <span class="bg-yellow-100 text-yellow-700 text-[10px] font-black px-1.5 py-0.5 rounded">{{ $item['count'] }}</span>
                 </li>
             @endforeach
+            <!-- Analytics Button -->
+            <li>
+                <a href="{{ route('analytics.index') }}" class="flex justify-between items-center py-2 px-2 mt-4 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-blue-600 rounded-lg cursor-pointer transition-colors text-sm font-bold text-slate-700">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        {{ __('Performance Analytics') }}
+                    </div>
+                </a>
+            </li>
             <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Favourites</li>
             <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Lists</li>
         </ul>
