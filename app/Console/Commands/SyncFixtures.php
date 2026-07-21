@@ -33,9 +33,20 @@ class SyncFixtures extends Command
             $fixtureInfo = $item['fixture'] ?? [];
             $teamsInfo = $item['teams'] ?? [];
             $goalsInfo = $item['goals'] ?? [];
+            $leagueInfo = $item['league'] ?? [];
 
             if (empty($fixtureInfo) || empty($teamsInfo)) {
                 continue;
+            }
+
+            // Extract the League Data
+            $leagueId = $leagueInfo['id'] ?? null;
+            $leagueName = $leagueInfo['name'] ?? 'Unknown League';
+
+            // Strict Exclusion Filter for blocked competitions
+            $blockedLeagues = ['XX', 'XX1'];
+            if (in_array($leagueName, $blockedLeagues)) {
+                continue; // Skips saving this match to the database
             }
 
             $homeTeam = Team::updateOrCreate(
@@ -58,6 +69,8 @@ class SyncFixtures extends Command
                     'status' => $fixtureInfo['status']['short'] ?? 'NS',
                     'home_score' => $goalsInfo['home'] ?? null,
                     'away_score' => $goalsInfo['away'] ?? null,
+                    'league_id' => $leagueId,
+                    'league_name' => $leagueName,
                 ]
             );
         }

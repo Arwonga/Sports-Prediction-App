@@ -51,37 +51,48 @@
     </div>
 
     <!-- Popular Leagues Section -->
-    <div class="mb-8">
-    <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">Popular Leagues</h3>
-    <ul class="space-y-2">
-        @php
-            $popularLeagues = [
-                ['name' => 'World Cup', 'count' => '4'],
-                ['name' => 'UEFA Champions League', 'count' => ''],
-                ['name' => 'UEFA Europa League', 'count' => ''],
-                ['name' => 'UEFA Europa Conference League', 'count' => ''],
-                ['name' => 'Premier League', 'count' => ''],
-                ['name' => 'LaLiga', 'count' => ''],
-                ['name' => 'Bundesliga', 'count' => ''],
-                ['name' => 'Serie A', 'count' => ''],
-                ['name' => 'Ligue 1', 'count' => ''],
-                ['name' => 'Eredivisie', 'count' => ''],
-                ['name' => 'Liga Portugal', 'count' => ''],
-                ['name' => 'Brasileiro Serie A', 'count' => '12'],
-                ['name' => 'Scottish Premiership', 'count' => ''],
-                ['name' => 'Süper Lig', 'count' => ''],
-                ['name' => 'Saudi Pro League', 'count' => ''],
-            ];
-        @endphp
-        @foreach($popularLeagues as $league)
-            <li class="flex justify-between items-center text-sm font-semibold text-slate-700 hover:text-blue-600 cursor-pointer py-1">
-                {{ $league['name'] }}
-                @if($league['count'])
-                    <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-1.5 py-0.5 rounded">{{ $league['count'] }}</span>
-                @endif
-            </li>
-        @endforeach
-    </ul>
-</div>
+    <div class="mt-8">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">{{ __('Popular Leagues') }}</h3>
+        <ul class="space-y-1">
+            @php
+                $popularLeagues = [
+                    'World Cup',
+                    'UEFA Champions League',
+                    'UEFA Europa League',
+                    'UEFA Europa Conference League',
+                    'Premier League',
+                    'LaLiga',
+                    'Bundesliga',
+                    'Serie A',
+                    'Ligue 1',
+                    'Eredivisie',
+                    'Liga Portugal',
+                    'Brasileiro Serie A',
+                    'Scottish Premiership',
+                    'Süper Lig',
+                    'Saudi Pro League'
+                ];
+            @endphp
+
+            @foreach($popularLeagues as $league)
+                <li>
+                    <a href="{{ request()->fullUrlWithQuery(['league' => $league]) }}" 
+                    class="flex items-center py-2 px-2 hover:bg-slate-100 rounded cursor-pointer transition-colors {{ request('league') === $league ? 'bg-slate-100 text-blue-600 font-bold' : 'text-slate-600' }}">
+                        <span class="text-sm">{{ __($league) }}</span>
+                    </a>
+                </li>
+            @endforeach
+            
+            <!-- Clear Filter Button (Only visible when a league is currently selected) -->
+            @if(request()->has('league'))
+                <li>
+                    <a href="{{ request()->fullUrlWithQuery(['league' => null]) }}" class="flex items-center gap-2 py-2 px-2 mt-4 text-xs font-bold text-red-500 hover:bg-red-50 rounded transition-colors">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        {{ __('Clear League Filter') }}
+                    </a>
+                </li>
+            @endif
+        </ul>
+    </div>
 
 </aside>

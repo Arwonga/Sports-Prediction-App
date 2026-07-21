@@ -16,15 +16,18 @@ class PredictionController extends Controller
         // Catch the active filters
         $leagueId = $request->query('league_id', 39); 
         $date = $request->query('date', \Carbon\Carbon::today()->format('Y-m-d'));
+        
+        // Catch the new dynamic league filter from the URL
+        $filterLeague = $request->query('league');
 
         // 1. Get the requested date from the URL (defaults to today if none is clicked)
-        $selectedDateString = $request->query('date', Carbon::today()->toDateString());
-        $selectedDate = Carbon::parse($selectedDateString);
+        $selectedDateString = $request->query('date', \Carbon\Carbon::today()->toDateString());
+        $selectedDate = \Carbon\Carbon::parse($selectedDateString);
 
         // 2. Generate the 5 navigation dates dynamically (2 days ago -> 2 days ahead)
         $navigationDates = [];
         for ($i = -2; $i <= 2; $i++) {
-            $navDate = Carbon::today()->addDays($i);
+            $navDate = \Carbon\Carbon::today()->addDays($i);
             $navigationDates[] = [
                 'label' => $navDate->isToday() ? 'Today' : $navDate->format('D'), // E.g., 'Sat', 'Sun', 'Today'
                 'date_string' => $navDate->toDateString(), // E.g., '2026-07-08'
@@ -33,7 +36,7 @@ class PredictionController extends Controller
         }
 
         // 3. Fetch fixtures specifically for the selected date
-        $fixtures = Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
+        $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
             ->whereDate('match_at', $selectedDate->toDateString())
             ->orderBy('match_at', 'asc')
             ->get();
@@ -48,13 +51,17 @@ class PredictionController extends Controller
         view()->share('standings', $standings);
         view()->share('featuredMatches', $featuredMatches);
 
-        // Fetch Center Table Data (Filtered strictly by Date ONLY to avoid the SQL crash)
+        // Fetch Center Table Data (Filtered strictly by Date and dynamically by League)
         $fixtures = \App\Models\Fixture::with(['homeTeam', 'awayTeam', 'prediction'])
             ->whereDate('match_at', $date)
+            ->when($filterLeague, function ($query, $filterLeague) {
+                return $query->where('league_name', $filterLeague);
+            })
             ->get();
 
         return view('predictions.index', compact('fixtures', 'leagueId', 'navigationDates', 'selectedDate', 'date'));
     }
+    
     /**
      * Display the detailed Match Centre for a specific fixture.
      */
