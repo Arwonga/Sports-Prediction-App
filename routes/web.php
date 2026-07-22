@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\TrendController;
+use App\Http\Controllers\PreviewController;
 
 Route::get('/predictions/{id}', [PredictionController::class, 'show'])->name('predictions.show');
 
@@ -26,3 +27,5 @@ Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics
 
 // More Menu Routes
 Route::get('/trends', [TrendController::class, 'index'])->name('features.trends');
+
+Route::get('/previews', [PreviewController::class, 'index'])->name('features.previews');

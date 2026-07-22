@@ -81,7 +81,12 @@
             <div class="p-5 border-b border-slate-100">
                 <h3 class="font-black text-slate-800 mb-4 text-base">More</h3>
                 <ul class="space-y-4">
-                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Previews</a></li>
+                    <li>
+                        <a href="{{ route('features.previews') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
+                            {{ __('Previews') }}
+                        </a>
+                    </li>
 
                     <li>
                         <a href="{{ route('features.trends') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
