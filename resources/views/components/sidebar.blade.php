@@ -2,15 +2,12 @@
     
     <!-- My Leagues Section -->
     <div class="mb-8">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">My Leagues</h3>
-        <select onchange="window.location.href='?league_id=' + this.value" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer">
-            <option value="39" {{ request('league_id') == 39 ? 'selected' : '' }}>England (Premier League)</option>
-            <option value="373" {{ request('league_id') == 373 ? 'selected' : '' }}>Kenya (Premier League)</option>
-        </select>
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">My Watchlist</h3>       
+        <!-- Dynamic Watchlist Container -->
+        <div id="sidebar-watchlist-container" class="mt-2 space-y-1">
+            <!-- JavaScript will automatically inject your saved matches here -->
+        </div>
         <ul class="mt-4 space-y-2">
-            <li class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 cursor-pointer">
-                <span class="text-yellow-500">★</span> Premier League
-            </li>
             <!-- Analytics Button -->
             <li>
                 <a href="{{ route('analytics.index') }}" class="flex justify-between items-center py-2 px-2 mt-4 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-blue-600 rounded-lg cursor-pointer transition-colors text-sm font-bold text-slate-700">
@@ -49,7 +46,7 @@
             @foreach($popularLeagues as $league)
                 <li>
                     <a href="{{ request()->fullUrlWithQuery(['league' => $league]) }}" 
-                    class="flex items-center py-2 px-2 hover:bg-slate-100 rounded cursor-pointer transition-colors {{ request('league') === $league ? 'bg-slate-100 text-blue-600 font-bold' : 'text-slate-600' }}">
+                    class="flex items-center py-2 px-2 hover:text-red-600 rounded cursor-pointer transition-colors {{ request('league') === $league ? 'bg-slate-100 text-blue-600 font-bold' : 'text-slate-600' }}">
                         <span class="text-sm">{{ __($league) }}</span>
                     </a>
                 </li>

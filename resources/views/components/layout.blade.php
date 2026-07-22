@@ -82,8 +82,13 @@
                 <h3 class="font-black text-slate-800 mb-4 text-base">More</h3>
                 <ul class="space-y-4">
                     <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Previews</a></li>
-                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> {{ __('Trends') }}</a></li>
-                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> {{ __('Top Trends') }}</a></li>
+
+                    <li>
+                        <a href="{{ route('features.trends') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> 
+                            {{ __('Trends') }}
+                        </a>
+                    </li>
                     <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0_9_9_9_9_9_9z"></path></svg> {{ __('Livescore') }}</a></li>
                     <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> {{ __('Injured Players') }}</a></li>
                     <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> {{ __('Team Comparison') }}</a></li>
@@ -214,54 +219,103 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const storageKey = 'prescore_watchlist';
-        let watchlist = JSON.parse(localStorage.getItem(storageKey)) || [];
+        
+        // Helper function to extract the real team names from the dashboard DOM
+        const extractMatchName = (id) => {
+            const row = document.getElementById(`fixture-row-${id}`);
+            if (row) {
+                // Targets the span elements holding the team names in your index.blade.php
+                const teamSpans = row.querySelectorAll('td:first-child span.truncate');
+                if (teamSpans.length >= 2) {
+                    return `${teamSpans[0].textContent.trim()} vs ${teamSpans[1].textContent.trim()}`;
+                }
+            }
+            return null;
+        };
+
+        // Load memory and automatically format old string IDs into objects
+        let rawData = JSON.parse(localStorage.getItem(storageKey)) || [];
+        let watchlist = rawData.map(item => {
+            return typeof item === 'string' ? { id: item, name: `Match #${item}` } : item;
+        });
+
+        // SELF-HEALING PROTOCOL: Upgrade old 'Match #ID' entries if they are visible on screen
+        let memoryUpdated = false;
+        watchlist.forEach(item => {
+            if (item.name.startsWith('Match #')) {
+                const realName = extractMatchName(item.id);
+                if (realName) {
+                    item.name = realName;
+                    memoryUpdated = true;
+                }
+            }
+        });
+        
+        // If we found and fixed any legacy names, save the corrected data back to the browser
+        if (memoryUpdated) {
+            localStorage.setItem(storageKey, JSON.stringify(watchlist));
+        }
 
         const refreshWatchlistUI = () => {
-            // Log to your browser console so we can track exactly what is saving
-            console.log("Current Watchlist Memory:", watchlist); 
-
-            // 1. Update the colors of the stars
+            // 1. Force the colors directly
             document.querySelectorAll('.watchlist-toggle').forEach(btn => {
                 const id = btn.getAttribute('data-fixture-id');
-                if (watchlist.includes(id)) {
-                    btn.classList.remove('text-slate-300');
-                    btn.classList.add('text-yellow-400');
+                const isStarred = watchlist.some(item => item.id === id);
+                
+                if (isStarred) {
+                    btn.style.color = '#facc15'; // yellow-400
                 } else {
-                    btn.classList.remove('text-yellow-400');
-                    btn.classList.add('text-slate-300');
+                    btn.style.color = '#cbd5e1'; // slate-300
                 }
             });
 
-            // 2. Physically move the starred rows to the top of the table body
-            // We clone and reverse the array so the order stacks perfectly at the top
-            [...watchlist].reverse().forEach(id => {
-                const row = document.getElementById(`fixture-row-${id}`);
+            // 2. Clear the sidebar container so we don't create duplicates
+            const sidebarContainer = document.getElementById('sidebar-watchlist-container');
+            if (sidebarContainer) sidebarContainer.innerHTML = '';
+
+            // 3. Move starred rows to the top AND inject them into the sidebar
+            [...watchlist].reverse().forEach(savedItem => {
+                // Move table row
+                const row = document.getElementById(`fixture-row-${savedItem.id}`);
                 if (row && row.parentNode) {
-                    // Pulls the row to the very top of its parent container
                     row.parentNode.prepend(row);
+                }
+
+                // Inject into Sidebar with truncation and hover-title
+                if (sidebarContainer) {
+                    const sidebarHtml = `
+                        <a href="/predictions/${savedItem.id}" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors">
+                            <svg class="w-4 h-4 text-yellow-400 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <span class="truncate" title="${savedItem.name}">${savedItem.name}</span>
+                        </a>
+                    `;
+                    sidebarContainer.insertAdjacentHTML('beforeend', sidebarHtml);
                 }
             });
         };
 
-        // Run the UI update as soon as the page loads
         refreshWatchlistUI();
 
-        // 3. Event Delegation: Listen on the whole body so listeners don't break when rows move
         document.body.addEventListener('click', (e) => {
             const btn = e.target.closest('.watchlist-toggle');
-            
-            // If they didn't click a star button, ignore it
             if (!btn) return; 
             
             e.preventDefault(); 
             
             const id = btn.getAttribute('data-fixture-id');
+            const existsIndex = watchlist.findIndex(item => item.id === id);
             
-            // Add or remove from the local memory
-            if (watchlist.includes(id)) {
-                watchlist = watchlist.filter(item => item !== id);
+            if (existsIndex > -1) {
+                // If it already exists, remove it
+                watchlist.splice(existsIndex, 1);
             } else {
-                watchlist.push(id);
+                // Extract the true match name, falling back to the ID only if extraction fails
+                let matchName = extractMatchName(id) || `Match #${id}`;
+                
+                // Save the ID and the dynamic Name
+                watchlist.push({ id: id, name: matchName });
             }
             
             // Save and instantly trigger the visual update
