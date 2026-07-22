@@ -6,36 +6,11 @@
         <select onchange="window.location.href='?league_id=' + this.value" class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-2 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer">
             <option value="39" {{ request('league_id') == 39 ? 'selected' : '' }}>England (Premier League)</option>
             <option value="373" {{ request('league_id') == 373 ? 'selected' : '' }}>Kenya (Premier League)</option>
-    </select>
+        </select>
         <ul class="mt-4 space-y-2">
             <li class="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 cursor-pointer">
                 <span class="text-yellow-500">★</span> Premier League
             </li>
-        </ul>
-    </div>
-
-    <!-- Football Predictions Menu -->
-    <div>
-        <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">{{ __('Football') }}</h3>
-        <ul class="space-y-1">
-            @php
-                $menuItems = [
-                    ['name' => 'Predictions for TODAY', 'count' => '252'],
-                    ['name' => 'LIVE predictions', 'count' => '45'],
-                    ['name' => 'Predictions for TOMORROW', 'count' => '40'],
-                    ['name' => 'Predictions for the WEEKEND', 'count' => '634'],
-                    ['name' => 'Predictions from YESTERDAY', 'count' => '1014'],
-                    ['name' => 'ALL predictions', 'count' => '573'],
-                    ['name' => 'TOP predictions', 'count' => '80'],
-                ];
-            @endphp
-            
-            @foreach($menuItems as $item)
-                <li class="flex justify-between items-center py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">
-                    {{ $item['name'] }}
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] font-black px-1.5 py-0.5 rounded">{{ $item['count'] }}</span>
-                </li>
-            @endforeach
             <!-- Analytics Button -->
             <li>
                 <a href="{{ route('analytics.index') }}" class="flex justify-between items-center py-2 px-2 mt-4 bg-slate-50 border border-slate-200 hover:bg-slate-100 hover:text-blue-600 rounded-lg cursor-pointer transition-colors text-sm font-bold text-slate-700">
@@ -45,11 +20,8 @@
                     </div>
                 </a>
             </li>
-            <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Favourites</li>
-            <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Lists</li>
         </ul>
     </div>
-
     <!-- Popular Leagues Section -->
     <div class="mt-8">
         <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">{{ __('Popular Leagues') }}</h3>
@@ -94,5 +66,34 @@
             @endif
         </ul>
     </div>
+
+    <!-- Football Predictions Menu -->
+    <div>
+        <h3 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-3">{{ __('Football') }}</h3>
+        <ul class="space-y-1">
+            @php
+                $menuItems = [
+                    ['name' => 'Predictions for TODAY', 'count' => '252'],
+                    ['name' => 'LIVE predictions', 'count' => '45'],
+                    ['name' => 'Predictions for TOMORROW', 'count' => '40'],
+                    ['name' => 'Predictions for the WEEKEND', 'count' => '634'],
+                    ['name' => 'Predictions from YESTERDAY', 'count' => '1014'],
+                    ['name' => 'ALL predictions', 'count' => '573'],
+                    ['name' => 'TOP predictions', 'count' => '80'],
+                ];
+            @endphp
+            
+            @foreach($menuItems as $item)
+                <li class="flex justify-between items-center py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">
+                    {{ $item['name'] }}
+                    <span class="bg-yellow-100 text-yellow-700 text-[10px] font-black px-1.5 py-0.5 rounded">{{ $item['count'] }}</span>
+                </li>
+            @endforeach
+            
+            <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Favourites</li>
+            <li class="py-2 px-2 hover:bg-slate-100 rounded cursor-pointer text-sm font-semibold text-slate-600">Lists</li>
+        </ul>
+    </div>
+
 
 </aside>

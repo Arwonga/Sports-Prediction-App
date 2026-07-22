@@ -56,7 +56,7 @@
                         $awayScore = $fixture->away_goals;
                         $isPlayed = !is_null($homeScore) && !is_null($awayScore);
                     @endphp
-                    <tr class="hover:bg-slate-50 transition-colors group">
+                    <tr id="fixture-row-{{ $fixture->id }}" class="hover:bg-slate-50 transition-colors group">
                         <td class="py-4 pl-6 text-left font-bold text-slate-800 w-1/4">
                         <a href="{{ route('predictions.show', $fixture->id) }}" class="group/link block">
                             <div class="flex items-center gap-2 mb-1.5">
@@ -79,7 +79,16 @@
                         <div class="flex items-center gap-1.5 mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <span>{{ \Carbon\Carbon::parse($fixture->match_at)->timezone(session('timezone', 'Africa/Nairobi'))->format('H:i') }}</span>
+                            <!-- Watchlist Star Button -->
+                            <button class="watchlist-toggle focus:outline-none transition-colors duration-200 text-slate-300 hover:text-yellow-400" 
+                                    data-fixture-id="{{ $fixture->id }}" 
+                                    title="{{ __('Add to Watchlist') }}">
+                                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                </svg>
+                            </button>
                         </div>
+                        
                         </td>
 
                         <td class="py-4 text-xs font-bold text-center">

@@ -211,4 +211,63 @@
     </main>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const storageKey = 'prescore_watchlist';
+        let watchlist = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        const refreshWatchlistUI = () => {
+            // Log to your browser console so we can track exactly what is saving
+            console.log("Current Watchlist Memory:", watchlist); 
+
+            // 1. Update the colors of the stars
+            document.querySelectorAll('.watchlist-toggle').forEach(btn => {
+                const id = btn.getAttribute('data-fixture-id');
+                if (watchlist.includes(id)) {
+                    btn.classList.remove('text-slate-300');
+                    btn.classList.add('text-yellow-400');
+                } else {
+                    btn.classList.remove('text-yellow-400');
+                    btn.classList.add('text-slate-300');
+                }
+            });
+
+            // 2. Physically move the starred rows to the top of the table body
+            // We clone and reverse the array so the order stacks perfectly at the top
+            [...watchlist].reverse().forEach(id => {
+                const row = document.getElementById(`fixture-row-${id}`);
+                if (row && row.parentNode) {
+                    // Pulls the row to the very top of its parent container
+                    row.parentNode.prepend(row);
+                }
+            });
+        };
+
+        // Run the UI update as soon as the page loads
+        refreshWatchlistUI();
+
+        // 3. Event Delegation: Listen on the whole body so listeners don't break when rows move
+        document.body.addEventListener('click', (e) => {
+            const btn = e.target.closest('.watchlist-toggle');
+            
+            // If they didn't click a star button, ignore it
+            if (!btn) return; 
+            
+            e.preventDefault(); 
+            
+            const id = btn.getAttribute('data-fixture-id');
+            
+            // Add or remove from the local memory
+            if (watchlist.includes(id)) {
+                watchlist = watchlist.filter(item => item !== id);
+            } else {
+                watchlist.push(id);
+            }
+            
+            // Save and instantly trigger the visual update
+            localStorage.setItem(storageKey, JSON.stringify(watchlist));
+            refreshWatchlistUI();
+        });
+    });
+</script>
 </html>

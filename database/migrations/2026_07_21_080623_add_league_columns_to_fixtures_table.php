@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
 {
     Schema::table('fixtures', function (Blueprint $table) {
-        $table->unsignedBigInteger('league_id')->nullable()->after('away_team');
+        $table->unsignedBigInteger('league_id')->nullable()->after('away_team_id');
         $table->string('league_name')->nullable()->after('league_id');
     });
 }
