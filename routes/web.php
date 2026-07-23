@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\TrendController;
 use App\Http\Controllers\PreviewController;
+use App\Http\Controllers\LivescoreController;
+use App\Http\Controllers\InjuredPlayerController;
 
 Route::get('/predictions/{id}', [PredictionController::class, 'show'])->name('predictions.show');
 
@@ -29,3 +31,7 @@ Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics
 Route::get('/trends', [TrendController::class, 'index'])->name('features.trends');
 
 Route::get('/previews', [PreviewController::class, 'index'])->name('features.previews');
+
+Route::get('/livescores', [LivescoreController::class, 'index'])->name('features.livescores');
+
+Route::get('/injured-players', [InjuredPlayerController::class, 'index'])->name('features.injured-players');
