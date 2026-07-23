@@ -108,7 +108,13 @@
                             {{ __('Injured Players') }}
                         </a>
                     </li>
-                    <li><a href="#" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors"><svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> {{ __('Team Comparison') }}</a></li>
+                    
+                    <li>
+                        <a href="{{ route('features.team-comparison') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
+                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> 
+                            {{ __('Team Comparison') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 
