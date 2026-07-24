@@ -97,7 +97,7 @@
                             <div class="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100 p-5 flex items-center gap-4">
                                 <div class="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 p-2 flex items-center justify-center shrink-0">
                                     <!-- NOW USING OBJECT NOTATION '->' INSTEAD OF ARRAYS '[]' -->
-                                    <img src="{{ $report->team_logo }}" alt="Logo" class="w-full h-full object-contain">
+                                    <img src="{{ $report->logo_Url }}" alt="Logo" class="w-full h-full object-contain">
                                 </div>
                                 <div>
                                     <h4 class="text-lg font-black text-slate-800">{{ $report->team_name }}</h4>

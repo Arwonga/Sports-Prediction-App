@@ -75,102 +75,128 @@
         </button>
 
         <!-- The Dropdown Panel -->
-        <div id="more-dropdown" class="hidden absolute right-0 top-12 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-slate-200 z-[99999] text-sm">
-            
-            <!-- Section 1: Features -->
-            <div class="p-5 border-b border-slate-100">
-                <h3 class="font-black text-slate-800 mb-4 text-base">More</h3>
-                <ul class="space-y-4">
-                    <li>
-                        <a href="{{ route('features.previews') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
-                            {{ __('Previews') }}
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ route('features.trends') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> 
-                            {{ __('Trends') }}
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="{{ route('features.livescores') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 
-                            {{ __('Livescore') }}
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="{{ route('features.injured-players') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> 
-                            {{ __('Injured Players') }}
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="{{ route('features.team-comparison') }}" class="flex items-center text-slate-600 hover:text-red-600 font-semibold transition-colors">
-                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> 
-                            {{ __('Team Comparison') }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Language Selector -->
-            <div class="relative group cursor-pointer p-5 border-b border-slate-100 bg-white">
-                <div class="flex items-center justify-between text-slate-700 font-bold text-sm px-4 py-2 bg-slate-50 rounded-lg">
-                    <div class="flex items-center gap-2 hover:text-red-600 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                        {{ __('Language') }}
-                    </div>
-                    <span class="text-xs uppercase bg-slate-200 px-2 py-0.5 rounded">{{ app()->getLocale() }}</span>
-                </div>
-            
-                <!-- The Language Dropdown Menu (Fixed: Flyout to the left) -->
-                <div class="absolute right-full top-0 mr-2 w-48 bg-white rounded-lg shadow-xl border border-slate-200 hidden group-hover:block z-[999999] py-1">
-                    <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">English</a>
-                    <a href="{{ route('language.switch', 'sw') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Swahili</a>
-                    <a href="{{ route('language.switch', 'es') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Español</a>
-                    <a href="{{ route('language.switch', 'fr') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Français</a>
-                    <a href="{{ route('language.switch', 'zh') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">中文 (Chinese)</a>
-                    <a href="{{ route('language.switch', 'ar') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">العربية (Arabic)</a>
-                    <a href="{{ route('language.switch', 'pt') }}" class="block px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-blue-600">Português</a>
-                </div>
-            </div>
-
-            <!-- Section 2: Settings -->
-            <div class="p-5 border-b border-slate-100 bg-slate-50">
-                <h3 class="font-black text-slate-800 mb-4 text-base">{{ __('Settings') }}</h3>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Time Zone</span>
-                        <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
-                            <option>BY DEFAULT</option>
-                            <option>Africa/Nairobi</option>
-                        </select>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="flex items-center text-slate-600 text-xs font-semibold"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg> % COEF</span>
-                        <select class="text-xs bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none text-slate-700 font-bold shadow-sm focus:border-red-500 cursor-pointer">
-                            <option>Decimal (European)</option>
-                            <option>Fractional (UK)</option>
-                            <option>American (US)</option>
-                        </select>
-                    </div>
-                    <button class="w-full mt-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-black tracking-wide py-2.5 rounded-full transition-colors">Save</button>
-                </div>
-            </div>
-
-            <!-- Section 3: About Us -->
-            <div class="p-5 bg-white">
-                <a href="#" class="flex justify-between items-center text-slate-800 font-black hover:text-red-600 transition-colors">
-                    {{ __('About Us') }}
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7-7"></path></svg>
+<div id="more-dropdown" class="hidden absolute right-0 top-12 mt-2 w-64 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-slate-200 z-[99999] text-xs pb-2">
+    
+    <!-- Section 1: Features -->
+    <div class="px-3 pt-3 pb-2 border-b border-slate-100">
+        <h3 class="font-black text-slate-400 uppercase tracking-widest mb-2 text-[10px] px-2">{{ __('Features') }}</h3>
+        <ul class="space-y-1">
+            <li>
+                <a href="{{ route('features.previews') }}" class="flex items-center px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-slate-50 rounded-xl font-bold transition-colors">
+                    <svg class="w-4 h-4 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> 
+                    {{ __('Previews') }}
                 </a>
+            </li>
+
+            <li>
+                <a href="{{ route('features.trends') }}" class="flex items-center px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-slate-50 rounded-xl font-bold transition-colors">
+                    <svg class="w-4 h-4 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> 
+                    {{ __('Trends') }}
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('features.livescores') }}" class="flex items-center px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-slate-50 rounded-xl font-bold transition-colors">
+                    <svg class="w-4 h-4 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 
+                    {{ __('Livescore') }}
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('features.injured-players') }}" class="flex items-center px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-slate-50 rounded-xl font-bold transition-colors">
+                    <svg class="w-4 h-4 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> 
+                    {{ __('Injured Players') }}
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('features.team-comparison') }}" class="flex items-center px-3 py-2 text-slate-600 hover:text-red-600 hover:bg-slate-50 rounded-xl font-bold transition-colors">
+                    <svg class="w-4 h-4 mr-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> 
+                    {{ __('Team Comparison') }}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="relative group cursor-pointer px-3 py-2 border-b border-slate-100 bg-white">
+        <div class="flex items-center justify-between text-slate-700 font-bold text-xs px-3 py-2 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors">
+            <div class="flex items-center gap-2 group-hover:text-red-600 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                {{ __('Language') }}
             </div>
+            <span class="text-[9px] uppercase bg-white px-2 py-0.5 rounded shadow-sm border border-slate-200">{{ app()->getLocale() }}</span>
         </div>
+    
+        <!-- The Language Dropdown Menu (Fixed: Flyout to the left) -->
+        <div class="absolute right-full top-0 mr-2 w-48 bg-white rounded-xl shadow-xl border border-slate-200 hidden group-hover:block z-[999999] py-2">
+            <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">English</a>
+            <a href="{{ route('language.switch', 'sw') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">Swahili</a>
+            <a href="{{ route('language.switch', 'es') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">Español</a>
+            <a href="{{ route('language.switch', 'fr') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">Français</a>
+            <a href="{{ route('language.switch', 'zh') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">中文 (Chinese)</a>
+            <a href="{{ route('language.switch', 'ar') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">العربية (Arabic)</a>
+            <a href="{{ route('language.switch', 'pt') }}" class="block px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-red-600 transition-colors">Português</a>
+        </div>
+    </div>
+
+    <!-- Settings Form -->
+    <form action="{{ route('settings.update') }}" method="POST" id="global-settings-form" class="p-3 bg-slate-50 m-3 mt-2 rounded-xl border border-slate-100">
+        @csrf
+        
+        <div class="flex items-center gap-2 mb-3">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Settings') }}</h4>
+        </div>
+        
+        <!-- Time Zone -->
+        <div class="mb-2">
+            <label class="block text-[10px] font-bold text-slate-500 mb-1.5">
+                {{ __('Time Zone') }}
+            </label>
+            @php
+                // Pull current session timezone, default to UTC if missing
+                $currentTz = session('timezone', 'UTC'); 
+                
+                // List of major world timezones
+                $timezones = [
+                    'UTC' => 'UTC (Default)',
+                    'Africa/Nairobi' => 'East Africa Time (EAT)',
+                    'Africa/Lagos' => 'West Africa Time (WAT)',
+                    'Europe/London' => 'London (GMT/BST)',
+                    'Europe/Paris' => 'Central Europe (CET)',
+                    'America/New_York' => 'Eastern Time (ET)',
+                    'America/Los_Angeles' => 'Pacific Time (PT)',
+                    'Asia/Dubai' => 'Dubai (GST)',
+                    'Asia/Tokyo' => 'Tokyo (JST)',
+                    'Australia/Sydney' => 'Sydney (AEST)',
+                ];
+                
+                // If the auto-detected timezone isn't in our clean list, add it dynamically so the dropdown doesn't break
+                if(!array_key_exists($currentTz, $timezones)) {
+                    $timezones[$currentTz] = $currentTz . ' (Auto)';
+                }
+            @endphp
+            <select name="timezone" class="w-full bg-white border border-slate-200 text-slate-700 text-[10px] font-bold rounded-lg px-2 py-2 focus:ring-2 focus:ring-red-500 outline-none shadow-sm cursor-pointer transition-shadow">
+                @foreach($timezones as $value => $label)
+                    <option value="{{ $value }}" {{ $currentTz === $value ? 'selected' : '' }}>{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <button type="submit" class="w-full mt-2 bg-slate-900 hover:bg-red-600 text-white font-black text-[10px] py-2 rounded-lg transition-colors uppercase tracking-widest shadow-md">
+            Save Settings
+        </button>
+    </form>
+
+    <!-- Section 3: About Us -->
+    <div class="px-3 pt-1">
+        <a href="#" class="flex justify-between items-center px-3 py-2 text-xs text-slate-600 font-bold hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-colors group">
+            {{ __('About Us') }}
+            <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7-7"></path></svg>
+        </a>
+    </div>
+</div>
     </div>
 </div>
 </div>

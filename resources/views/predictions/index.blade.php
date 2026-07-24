@@ -34,7 +34,6 @@
                     <th class="py-4 text-center">{{ __('BTTS %') }} <br> <span class="text-slate-500 font-black mt-1 block">Y &nbsp;&nbsp;&nbsp;&nbsp; N</span></th>
                     <th class="py-4 text-center">{{ __('O/U 2.5') }} <br> <span class="text-slate-500 font-black mt-1 block">O &nbsp;&nbsp;&nbsp;&nbsp; U</span></th>
                     <th class="py-4 text-center whitespace-nowrap">{{ __('Avg Goals') }}</th>
-                    <th class="py-4 text-center whitespace-nowrap">{{ __('Coef.') }} <br> &nbsp;</th>
                     <th class="py-4 text-center whitespace-nowrap">{{ __('Verdict') }} <br> &nbsp;</th>
                     <th class="py-4 text-center font-bold text-slate-400 pb-3">{{ __('RESULT') }}</th>
                 </tr>
@@ -47,11 +46,7 @@
                         // 1. Calculate Average Goals on the fly (Home xG + Away xG)
                         $avgGoals = ($pred->home_xg ?? 0) + ($pred->away_xg ?? 0);
                         
-                        // 2. Calculate Implied Odds (Coefficient) based on highest win probability
-                        $maxProb = max($pred->home_win_prob ?? 1, $pred->away_win_prob ?? 1);
-                        $coefficient = $maxProb > 0 ? (100 / $maxProb) : 0.00;
-                        
-                        // 3. Handle Full Time Score 
+                        // 2. Handle Full Time Score 
                         $homeScore = $fixture->home_goals; 
                         $awayScore = $fixture->away_goals;
                         $isPlayed = !is_null($homeScore) && !is_null($awayScore);
@@ -79,7 +74,6 @@
                         <div class="flex items-center gap-1.5 mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <span>{{ \Carbon\Carbon::parse($fixture->match_at)->timezone(session('timezone', 'Africa/Nairobi'))->format('H:i') }}</span>
-                            <!-- Watchlist Star Button -->
                             <button class="watchlist-toggle focus:outline-none transition-colors duration-200 text-slate-300 hover:text-yellow-400" 
                                     data-fixture-id="{{ $fixture->id }}" 
                                     title="{{ __('Add to Watchlist') }}">
@@ -126,10 +120,6 @@
 
                         <td class="py-4 text-xs font-bold text-slate-700 text-center whitespace-nowrap">
                             {{ number_format($avgGoals, 2) }}
-                        </td>
-
-                        <td class="py-4 text-xs font-bold text-blue-600 text-center whitespace-nowrap">
-                            {{ number_format($coefficient, 2) }}
                         </td>
 
                         <td class="py-4 text-center whitespace-nowrap">
@@ -215,7 +205,7 @@
                             </div>
                         </td>
                     </tr> <tr id="markets-{{ $index }}" class="hidden bg-slate-900 border-b-4 border-slate-800">
-                        <td colspan="8" class="p-6"> <div class="grid grid-cols-4 gap-6 text-left">
+                        <td colspan="7" class="p-6"> <div class="grid grid-cols-4 gap-6 text-left">
                                 <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
                                     <h4 class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-3">Expected Goals (xG)</h4>
                                     <div class="flex justify-between text-sm font-black text-white mb-2">
@@ -264,7 +254,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="py-12 text-center text-slate-400 text-sm font-semibold"> No fixtures found for today.
+                        <td colspan="7" class="py-12 text-center text-slate-400 text-sm font-semibold"> No fixtures found for today.
                         </td>
                     </tr>
                 @endforelse
@@ -306,7 +296,7 @@
         if (!matchFound && input !== '') {
             if (!noMatchRow) {
                 // Create the message row if it doesn't exist
-                tableBody.insertAdjacentHTML('beforeend', '<tr id="no-match-message"><td colspan="8" class="py-12 text-center text-slate-400 text-sm font-semibold">No matches found for "' + input + '".</td></tr>');
+                tableBody.insertAdjacentHTML('beforeend', '<tr id="no-match-message"><td colspan="7" class="py-12 text-center text-slate-400 text-sm font-semibold">No matches found for "' + input + '".</td></tr>');
             } else {
                 // Update text and show if it does exist
                 noMatchRow.querySelector('td').innerText = 'No matches found for "' + input + '".';

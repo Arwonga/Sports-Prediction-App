@@ -10,6 +10,7 @@ use App\Http\Controllers\PreviewController;
 use App\Http\Controllers\LivescoreController;
 use App\Http\Controllers\InjuredPlayerController;
 use App\Http\Controllers\TeamComparisonController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/predictions/{id}', [PredictionController::class, 'show'])->name('predictions.show');
 
@@ -38,3 +39,7 @@ Route::get('/livescores', [LivescoreController::class, 'index'])->name('features
 Route::get('/injured-players', [InjuredPlayerController::class, 'index'])->name('features.injured-players');
 
 Route::get('/team-comparison', [TeamComparisonController::class, 'index'])->name('features.team-comparison');
+
+// Settings & Preferences
+Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
+Route::post('/settings/auto-timezone', [SettingsController::class, 'autoDetectTimezone'])->name('settings.auto-timezone');
