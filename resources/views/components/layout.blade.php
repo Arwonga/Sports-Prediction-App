@@ -28,29 +28,32 @@
     <nav class="bg-slate-900 border-b-2 border-red-600 sticky top-0 z-50 shadow-md w-full">
         <!-- Top Branding & User Bar -->
         <div class="w-full px-6 flex justify-between items-center h-16">
-            <div class="flex items-center gap-3">
-            <a href="/" class="group flex items-center text-[28px] font-black italic tracking-tight">
-                <span class="text-red-500">Pre</span>
-                
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mx-0.5 text-white transition-transform duration-500 group-hover:rotate-90">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 12l3.5 2 1.5-3.5L12 7l-5 3.5 1.5 3.5z"></path>
-                    <path d="M12 7V2"></path>
-                    <path d="M17 10.5l4-2.5"></path>
-                    <path d="M15.5 14l2.5 5"></path>
-                    <path d="M8.5 14l-2.5 5"></path>
-                    <path d="M7 10.5L3 8"></path>
-                </svg>
+            <!-- Top Branding & User Bar -->
+        <div class="w-full px-6 flex justify-between items-center h-16">
+            <div class="flex items-center gap-3 min-w-0">
+                <a href="/" class="group flex items-center text-[28px] font-black italic tracking-tight shrink-0">
+                    <span class="text-red-500">Pre</span>
+                    
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mx-0.5 text-white transition-transform duration-500 group-hover:rotate-90">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 12l3.5 2 1.5-3.5L12 7l-5 3.5 1.5 3.5z"></path>
+                        <path d="M12 7V2"></path>
+                        <path d="M17 10.5l4-2.5"></path>
+                        <path d="M15.5 14l2.5 5"></path>
+                        <path d="M8.5 14l-2.5 5"></path>
+                        <path d="M7 10.5L3 8"></path>
+                    </svg>
 
-                <!-- Fiery Yellow 'Score' -->
-                <span class="text-transparent bg-clip-text bg-gradient-to-t from-orange-600 via-yellow-400 to-yellow-100 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">
-                    Score
-                </span>
-            </a>
-            <div class="hidden md:block w-px h-6 bg-slate-700 mx-3"></div>
-            <div class="hidden md:block text-xs font-semibold tracking-widest text-slate-300 uppercase font-sans">
-                {{ __('The smart money runs on data') }}
-            </div>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-t from-orange-600 via-yellow-400 to-yellow-100 drop-shadow-[0_0_8px_rgba(250,204,21,0.5)]">
+                        Score
+                    </span>
+                </a>
+                
+                <div class="hidden lg:block w-px h-6 bg-slate-700 mx-3 shrink-0"></div>
+                
+                <div class="hidden lg:block text-[11px] font-bold tracking-[0.2em] uppercase font-sans shimmer-text truncate">
+                    {{ __('The smart money runs on data') }}
+                </div>
             </div>
 
 
