@@ -38,8 +38,7 @@
                     'Liga Portugal',
                     'Brasileiro Serie A',
                     'Scottish Premiership',
-                    'Süper Lig',
-                    'Saudi Pro League'
+                    'Süper Lig'
                 ];
             @endphp
 

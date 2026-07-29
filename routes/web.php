@@ -11,6 +11,7 @@ use App\Http\Controllers\LivescoreController;
 use App\Http\Controllers\InjuredPlayerController;
 use App\Http\Controllers\TeamComparisonController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\AboutController;
 
 Route::get('/predictions/{id}', [PredictionController::class, 'show'])->name('predictions.show');
 
@@ -43,3 +44,5 @@ Route::get('/team-comparison', [TeamComparisonController::class, 'index'])->name
 // Settings & Preferences
 Route::post('/settings/update', [SettingsController::class, 'update'])->name('settings.update');
 Route::post('/settings/auto-timezone', [SettingsController::class, 'autoDetectTimezone'])->name('settings.auto-timezone');
+
+Route::get('/about', [AboutController::class, 'index'])->name('about');
